@@ -1,0 +1,330 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>11.2C++ 中的引用 - TICPP</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../../TICPP/11/11.0.html"><strong aria-hidden="true">1.</strong> 11.References & the Copy-Constructor)</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../TICPP/11/11.1.html"><strong aria-hidden="true">1.1.</strong> 11.1C++ 中的指针</a></li><li class="chapter-item expanded "><a href="../../TICPP/11/11.2.html" class="active"><strong aria-hidden="true">1.2.</strong> 11.2C++ 中的引用</a></li><li class="chapter-item expanded "><a href="../../TICPP/11/11.3.html"><strong aria-hidden="true">1.3.</strong> 11.3拷贝构造函数</a></li><li class="chapter-item expanded "><a href="../../TICPP/11/11.4.html"><strong aria-hidden="true">1.4.</strong> 11.成员指针</a></li><li class="chapter-item expanded "><a href="../../TICPP/11/11.5.html"><strong aria-hidden="true">1.5.</strong> 11.Summary</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">TICPP</h1>
+
+                    <div class="right-buttons">
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="112-references-in-cc-中的引用"><a class="header" href="#112-references-in-cc-中的引用">11.2 References in C++(C++ 中的引用)</a></h2>
+<p><em>reference</em>（<strong>&amp;</strong>）就像一个自动取消引用的常量指针。它通常用于函数参数列表和函数返回值。但你也可以创建一个独立的引用。例如</p>
+<pre><code class="language-cpp">//: C11:FreeStandingReferences.cpp
+#include &lt;iostream&gt;
+using namespace std;
+ 
+// Ordinary free-standing reference:
+int y;
+int&amp; r = y;
+// When a reference is created, it must 
+// be initialized to a live object. 
+// However, you can also say:
+const int&amp; q = 12;  // (1)
+// References are tied to someone else's storage:
+int x = 0;          // (2)
+int&amp; a = x;         // (3)
+int main() {
+  cout &lt;&lt; "x = " &lt;&lt; x &lt;&lt; ", a = " &lt;&lt; a &lt;&lt; endl;
+  a++;
+  cout &lt;&lt; "x = " &lt;&lt; x &lt;&lt; ", a = " &lt;&lt; a &lt;&lt; endl;
+} ///:~
+</code></pre>
+<p>在第(1)行中，编译器分配了一个存储空间，将其初始化为值 12，并将引用与该存储空间绑定。问题的关键在于，任何引用都必须绑定到别人的存储空间上。当你访问引用时，就是在访问该存储空间。因此，如果你写了像(2)和(3)这样的行，那么递增<strong>a</strong>实际上就是递增<strong>x</strong>，如**main( )**所示。再次强调，将引用视为一个漂亮的指针是最简单的方法。这种 "指针 "的一个优点是，你不必担心它是否已被初始化（编译器会强制初始化）以及如何取消引用（编译器会取消引用）。</p>
+<p>使用引用有一定的规则：</p>
+<ol>
+<li>引用必须在创建时初始化。(指针可随时初始化）</li>
+<li>引用一旦被初始化为一个对象，就不能更改为指向另一个对象。(指针可以随时指向另一个对象）</li>
+<li>不能有 NULL 引用。必须始终能够假定引用连接到一个合法的存储空间。</li>
+</ol>
+<h3 id="references-in-functions函数中的引用"><a class="header" href="#references-in-functions函数中的引用">References in functions(函数中的引用)</a></h3>
+<p>最常见的引用是函数参数和返回值。当引用用作函数参数时，对函数内部引用的任何修改都会导致函数外部参数的改变。当然，你也可以通过传递指针来做同样的事情，但引用的语法更简洁。(如果你愿意，可以把引用看作是一种语法上的便利)</p>
+<p>如果从函数中返回引用，就必须像从函数中返回指针一样小心谨慎。当函数返回时，引用所连接的任何内容都不应消失，否则就会指向未知内存。</p>
+<p>这里有一个例子：</p>
+<pre><code class="language-cpp">//: C11:Reference.cpp
+// Simple C++ references
+
+int* f(int* x) {
+  (*x)++;
+  return x; // Safe, x is outside this scope
+}
+
+int&amp; g(int&amp; x) {
+  x++; // Same effect as in f()
+  return x; // Safe, outside this scope
+}
+
+int&amp; h() {
+  int q;
+//!  return q;  // Error
+  static int x;
+  return x; // Safe, x lives outside this scope
+}
+
+int main() {
+  int a = 0;
+  f(&amp;a); // Ugly (but explicit)
+  g(a);  // Clean (but hidden)
+} ///:~
+</code></pre>
+<p>对 <strong>f( )</strong> 的调用没有使用引用那么方便和简洁，但显然传递了一个地址。在<strong>g( )</strong> 的调用中，地址正在传递（通过引用），但你看不到。</p>
+<h4 id="const-references"><a class="header" href="#const-references">const references</a></h4>
+<p><strong>Reference.cpp</strong>中的引用参数只有在参数为非<strong>const</strong>对象时才起作用。如果它是一个<strong>const</strong>对象，函数 <strong>g( )</strong> 将不接受该参数，这实际上是一件好事，因为函数_确实_修改了外部参数。如果知道函数将尊重对象的<strong>const</strong>性，那么将参数作为<strong>const</strong>引用将允许函数在所有情况下使用。这意味着，对于内置类型，函数不会修改参数，而对于用户定义类型，函数只会调用<strong>const</strong>成员函数，不会修改任何<strong>public</strong>数据成员。</p>
+<p>在函数参数中使用 <strong>const</strong> 引用尤为重要，因为您的函数可能会收到一个临时对象。该对象可能是作为另一个函数的返回值创建的，也可能是由函数用户明确创建的。临时对象总是<strong>const</strong>的，因此如果不使用<strong>const</strong>引用，编译器就不会接受该参数。举个简单的例子</p>
+<pre><code class="language-cpp">//: C11:ConstReferenceArguments.cpp
+// Passing references as const
+
+void f(int&amp;) {}
+void g(const int&amp;) {}
+
+int main() {
+//!  f(1); // Error
+  g(1);
+} ///:~
+</code></pre>
+<p>调用 <strong>f(1)</strong> 会导致编译时错误，因为编译器必须首先创建一个引用。为此，编译器必须为一个 <strong>int</strong> 分配存储空间，将其初始化为 1，并产生与引用绑定的地址。存储空间必须是<strong>常数</strong>，因为改变存储空间是没有意义的--你将永远无法再使用它。对于所有临时对象，你都必须做出同样的假设：它们是不可访问的。编译器会在你更改这些数据时告诉你，这是很有价值的，因为这样做的结果就是丢失信息。</p>
+<h4 id="pointer-references指针引用"><a class="header" href="#pointer-references指针引用">Pointer references(指针引用)</a></h4>
+<p>在 C 语言中，如果要修改指针的_contents_（内容），而不是指针所指向的内容，函数声明就会如下所示：</p>
+<pre><code class="language-cpp">void f(int**);
+</code></pre>
+<p>而且在传入指针时，必须获取指针的地址：</p>
+<pre><code class="language-cpp">&gt; int i = 47;
+&gt; int* ip = &amp;i;
+&gt; f(&amp;ip); 
+</code></pre>
+<p>C++ 中的引用语法更加简洁。函数参数变成了对指针的引用，你不再需要获取该指针的地址。因此</p>
+<pre><code class="language-cpp">&gt; //: C11:ReferenceToPointer.cpp
+&gt; #include &lt;iostream&gt;
+&gt; using namespace std;
+&gt; 
+&gt; void increment(int*&amp; i) { i++; }
+&gt; 
+&gt; int main() {
+&gt;   int* i = 0;
+&gt;   cout &lt;&lt; "i = " &lt;&lt; i &lt;&lt; endl;
+&gt;   increment(i);
+&gt;   cout &lt;&lt; "i = " &lt;&lt; i &lt;&lt; endl;
+&gt; } ///:~
+</code></pre>
+<p>通过运行这个程序，你可以证明指针是递增的，而不是指针指向的内容。</p>
+<h3 id="argument-passing-guidelines--无恰当翻译"><a class="header" href="#argument-passing-guidelines--无恰当翻译">Argument-passing guidelines  (无恰当翻译)</a></h3>
+<p>向函数传递参数时，您通常的习惯应该是通过 <strong>const</strong> 引用来传递。虽然起初这似乎只是一个效率问题（而且在设计和编译程序时，你通常并不关心效率问题），但实际上还有更重要的问题：正如你在本章剩余的内容中所看到的，要通过值传递一个对象，需要一个拷贝构造函数，而这并不总是可用的。</p>
+<p>对于这样一个简单的习惯，可以节省大量的效率：通过值传递参数需要调用构造函数和析构函数，但如果你不打算修改参数，那么通过 <strong>const</strong> 引用传递参数只需要在堆栈中推送一个地址。</p>
+<p>事实上，几乎只有一种情况下传递地址是不可取的，那就是当你要对一个对象造成严重破坏时，按值传递是唯一安全的方法（而不是修改外部对象，这通常不是调用者所期望的）。这就是下一节的主题。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../TICPP/11/11.1.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../../TICPP/11/11.3.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../TICPP/11/11.1.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../../TICPP/11/11.3.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../../elasticlunr.min.js"></script>
+        <script src="../../mark.min.js"></script>
+        <script src="../../searcher.js"></script>
+
+        <script src="../../clipboard.min.js"></script>
+        <script src="../../highlight.js"></script>
+        <script src="../../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

@@ -1,0 +1,359 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>11.成员指针 - TICPP</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../../TICPP/11/11.0.html"><strong aria-hidden="true">1.</strong> 11.References & the Copy-Constructor)</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../TICPP/11/11.1.html"><strong aria-hidden="true">1.1.</strong> 11.1C++ 中的指针</a></li><li class="chapter-item expanded "><a href="../../TICPP/11/11.2.html"><strong aria-hidden="true">1.2.</strong> 11.2C++ 中的引用</a></li><li class="chapter-item expanded "><a href="../../TICPP/11/11.3.html"><strong aria-hidden="true">1.3.</strong> 11.3拷贝构造函数</a></li><li class="chapter-item expanded "><a href="../../TICPP/11/11.4.html" class="active"><strong aria-hidden="true">1.4.</strong> 11.成员指针</a></li><li class="chapter-item expanded "><a href="../../TICPP/11/11.5.html"><strong aria-hidden="true">1.5.</strong> 11.Summary</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">TICPP</h1>
+
+                    <div class="right-buttons">
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="114-pointers-to-members成员指针"><a class="header" href="#114-pointers-to-members成员指针">11.4 Pointers to members(成员指针)</a></h2>
+<p>指针是保存某个位置地址的变量。您可以在运行时更改指针选择的位置，指针的目的地可以是数据或函数。C++ 的_pointer-to-member_遵循了同样的概念，只不过它选择的是类中的一个位置。这里的难题在于，指针需要一个地址，但类内部没有 "地址"；选择类的成员意味着偏移到该类中。只有将偏移量与特定对象的起始地址相结合，才能产生实际地址。成员指针的语法要求在取消引用成员指针的同时选择一个对象。</p>
+<p>要理解这种语法，请考虑一个简单的结构体，该结构体有一个指针 <strong>sp</strong> 和一个对象 <strong>so</strong>。您可以使用所示语法选择成员：</p>
+<pre><code class="language-cpp">&gt; //: C11:SimpleStructure.cpp
+&gt; struct Simple { int a; };
+&gt; int main() {
+&gt;   Simple so, *sp = &amp;so;
+&gt;   sp-&gt;a;
+&gt;   so.a;
+&gt; } ///:~
+</code></pre>
+<p>现在，假设你有一个指向整数 <strong>ip</strong> 的普通指针。要访问<strong>ip</strong>指向的内容，需要使用 "<code>*</code>"对指针进行反引用：</p>
+<pre><code class="language-cpp">&gt; *ip = 4;
+</code></pre>
+<p>最后，考虑一下如果有一个指针恰好指向一个类对象内部的某物，即使它实际上表示对象的偏移量，会发生什么情况。要访问指针指向的内容，必须使用 <strong><code>*</code></strong> 对其进行反引用。但它是一个对象的偏移量，因此还必须引用该特定对象。因此，<strong><code>*</code></strong> 与对象取消引用相结合。因此，新的语法变成 <strong><code>-&gt;</code></strong>* 表示指向对象的指针，<strong><code>.</code></strong>* 表示对象或引用，就像这样：</p>
+<pre><code class="language-cpp">&gt; objectPointer-&gt;*pointerToMember = 47;
+&gt; object.*pointerToMember = 47;
+</code></pre>
+<p>现在，定义 <strong>pointerToMember</strong> 的语法是什么？与任何指针一样，你必须说明它指向的类型，并在定义中使用 <strong><code>*</code></strong>。唯一不同的是，你必须说明这个指针转成员的对象类别。当然，这可以通过类名和作用域解析操作符来实现。因此</p>
+<pre><code class="language-cpp">&gt; int ObjectClass::*pointerToMember;
+</code></pre>
+<p>定义了一个名为<strong>pointerToMember</strong>的指针到成员变量，该变量指向<strong>ObjectClass</strong>内部的任意<strong>int</strong>。您也可以在定义时（或其他任何时候）初始化指针到成员变量：</p>
+<pre><code class="language-cpp">&gt; int ObjectClass::*pointerToMember = &amp;ObjectClass::a;
+</code></pre>
+<p>实际上，<strong>ObjectClass::a</strong> 并没有 "地址"，因为您只是在引用类，而不是该类的对象。因此，<strong>&amp;ObjectClass::a</strong> 只能用作指针到成员的语法。</p>
+<p>下面的示例展示了如何创建和使用指向数据成员的指针：</p>
+<pre><code class="language-cpp">&gt; //: C11:PointerToMemberData.cpp
+&gt; #include &lt;iostream&gt;
+&gt; using namespace std;
+&gt; 
+&gt; class Data {
+&gt; public:  
+&gt;   int a, b, c; 
+&gt;   void print() const {
+&gt;     cout &lt;&lt; "a = " &lt;&lt; a &lt;&lt; ", b = " &lt;&lt; b
+&gt;          &lt;&lt; ", c = " &lt;&lt; c &lt;&lt; endl;
+&gt;   }
+&gt; };
+&gt; 
+&gt; int main() {
+&gt;   Data d, *dp = &amp;d;
+&gt;   int Data::*pmInt = &amp;Data::a;
+&gt;   dp-&gt;*pmInt = 47;
+&gt;   pmInt = &amp;Data::b;
+&gt;   d.*pmInt = 48;
+&gt;   pmInt = &amp;Data::c;
+&gt;   dp-&gt;*pmInt = 49;
+&gt;   dp-&gt;print();
+&gt; } ///:~
+</code></pre>
+<p>显然，除了特殊情况（这也正是它们的初衷），在其他任何地方使用它们都过于笨拙。</p>
+<p>此外，指向成员的指针也有相当大的局限性：它们只能被分配到类内部的特定位置。例如，你不能像使用普通指针那样对它们进行递增或比较。</p>
+<h3 id="functions--函数"><a class="header" href="#functions--函数">Functions  (函数)</a></h3>
+<p>类似的练习可以产生成员函数的指针到成员语法。函数指针（在第 3 章末尾介绍）是这样定义的：</p>
+<pre><code class="language-cpp">&gt; int (*fp)(float);
+</code></pre>
+<p><strong>(<code>*fp</code>)</strong> 周围的括号是强制编译器正确评估定义所必需的。如果没有括号，这个函数看起来就像是一个返回  <strong>int</strong> *  的函数。</p>
+<p>在定义和使用成员函数指针时，括号也起着重要作用。如果在一个类中有一个函数，则可以通过在普通函数指针定义中插入类名和作用域解析操作符来定义指向该成员函数的指针：</p>
+<pre><code class="language-cpp">&gt; //: C11:PmemFunDefinition.cpp
+&gt; class Simple2 { 
+&gt; public: 
+&gt;   int f(float) const { return 1; }
+&gt; };
+&gt; int (Simple2::*fp)(float) const;
+&gt; int (Simple2::*fp2)(float) const = &amp;Simple2::f;
+&gt; int main() {
+&gt;   fp = &amp;Simple2::f;
+&gt; } ///:~
+</code></pre>
+<p>在 <strong>fp2</strong> 的定义中，您可以看到成员函数的指针也可以在创建时或其他任何时候初始化。与非会员函数不同，在获取成员函数的地址时，<strong>&amp;</strong> 并非可选项。不过，您可以给出函数标识符，而无需参数列表，因为重载解析可以由成员函数指针的类型决定。</p>
+<h4 id="an-example举例说明"><a class="header" href="#an-example举例说明">An example(举例说明)</a></h4>
+<p>指针的价值在于你可以在运行时改变它指向的对象，这为你的编程提供了重要的灵活性，因为通过指针，你可以在运行时选择或改变_行为。成员指针也是如此，它允许你在运行时选择一个成员。通常情况下，您的类只会有公开可见的成员函数（数据成员通常被视为底层实现的一部分），因此下面的示例可以在运行时选择成员函数。</p>
+<pre><code class="language-cpp">&gt; //: C11:PointerToMemberFunction.cpp
+&gt; #include &lt;iostream&gt;
+&gt; using namespace std;
+&gt; 
+&gt; class Widget {
+&gt; public:
+&gt;   void f(int) const { cout &lt;&lt; "Widget::f()\n"; }
+&gt;   void g(int) const { cout &lt;&lt; "Widget::g()\n"; }
+&gt;   void h(int) const { cout &lt;&lt; "Widget::h()\n"; }
+&gt;   void i(int) const { cout &lt;&lt; "Widget::i()\n"; }
+&gt; };
+&gt; 
+&gt; int main() {
+&gt;   Widget w;
+&gt;   Widget* wp = &amp;w;
+&gt;   void (Widget::*pmem)(int) const = &amp;Widget::h;
+&gt;   (w.*pmem)(1);
+&gt;   (wp-&gt;*pmem)(2);
+&gt; } ///:~
+</code></pre>
+<p>当然，期望普通用户创建如此复杂的表达式并不特别合理。如果用户必须直接操作指针转成员，那么就需要使用<strong>类型定义</strong>。要真正做到一尘不染，可以将指针到成员作为内部实现机制的一部分。下面是使用指针转成员_在类内部_的示例。用户只需输入一个数字即可选择一个函数。</p>
+<pre><code class="language-cpp">&gt; //: C11:PointerToMemberFunction2.cpp
+&gt; #include &lt;iostream&gt;
+&gt; using namespace std;
+&gt; 
+&gt; class Widget {
+&gt;   void f(int) const { cout &lt;&lt; "Widget::f()\n"; }
+&gt;   void g(int) const { cout &lt;&lt; "Widget::g()\n"; }
+&gt;   void h(int) const { cout &lt;&lt; "Widget::h()\n"; }
+&gt;   void i(int) const { cout &lt;&lt; "Widget::i()\n"; }
+&gt;   enum { cnt = 4 };
+&gt;   void (Widget::*fptr[cnt])(int) const;
+&gt; public:
+&gt;   Widget() {
+&gt;     fptr[0] = &amp;Widget::f; // Full spec required
+&gt;     fptr[1] = &amp;Widget::g;
+&gt;     fptr[2] = &amp;Widget::h;
+&gt;     fptr[3] = &amp;Widget::i;
+&gt;   }
+&gt;   void select(int i, int j) {
+&gt;     if(i &lt; 0 || i &gt;= cnt) return;
+&gt;     (this-&gt;*fptr[i])(j);
+&gt;   }
+&gt;   int count() { return cnt; }
+&gt; };
+&gt; 
+&gt; int main() {
+&gt;   Widget w;
+&gt;   for(int i = 0; i &lt; w.count(); i++)
+&gt;     w.select(i, 47);
+&gt; } ///:~
+</code></pre>
+<p>在类界面和 <strong>main( )</strong> 中，你可以看到包括函数在内的整个实现都被隐藏起来了。代码甚至必须询问函数的<strong>count( )</strong>。这样，类的实现者就可以改变底层实现中的函数数量，而不会影响使用该类的代码。</p>
+<p>在构造函数中对成员指针的初始化似乎过于规范。难道不应该说</p>
+<pre><code class="language-cpp">&gt; fptr[1] = &amp;g;
+</code></pre>
+<p>因为 <strong>g</strong> 这个名字出现在成员函数中，而成员函数自动处于类的作用域中？问题是这不符合成员指针语法，而成员指针语法是每个人（尤其是编译器）都必须掌握的。同样，当指针到成员被取消引用时，似乎是</p>
+<pre><code class="language-cpp">&gt; (this-&gt;*fptr[i])(j);
+</code></pre>
+<p>也指定得过多；<strong>这</strong>看起来是多余的。同样，语法要求成员指针在被取消引用时始终与对象绑定。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../TICPP/11/11.3.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../../TICPP/11/11.5.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../TICPP/11/11.3.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../../TICPP/11/11.5.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../../elasticlunr.min.js"></script>
+        <script src="../../mark.min.js"></script>
+        <script src="../../searcher.js"></script>
+
+        <script src="../../clipboard.min.js"></script>
+        <script src="../../highlight.js"></script>
+        <script src="../../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

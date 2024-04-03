@@ -1,0 +1,568 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>11.3拷贝构造函数 - TICPP</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../../TICPP/11/11.0.html"><strong aria-hidden="true">1.</strong> 11.References & the Copy-Constructor)</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../TICPP/11/11.1.html"><strong aria-hidden="true">1.1.</strong> 11.1C++ 中的指针</a></li><li class="chapter-item expanded "><a href="../../TICPP/11/11.2.html"><strong aria-hidden="true">1.2.</strong> 11.2C++ 中的引用</a></li><li class="chapter-item expanded "><a href="../../TICPP/11/11.3.html" class="active"><strong aria-hidden="true">1.3.</strong> 11.3拷贝构造函数</a></li><li class="chapter-item expanded "><a href="../../TICPP/11/11.4.html"><strong aria-hidden="true">1.4.</strong> 11.成员指针</a></li><li class="chapter-item expanded "><a href="../../TICPP/11/11.5.html"><strong aria-hidden="true">1.5.</strong> 11.Summary</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">TICPP</h1>
+
+                    <div class="right-buttons">
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="113-the-copy-constructor拷贝构造函数"><a class="header" href="#113-the-copy-constructor拷贝构造函数">11.3 The copy-constructor(拷贝构造函数)</a></h2>
+<p>现在，您已经了解了 C++ 中引用的基础知识，可以开始处理语言中更容易混淆的概念之一：复制构造函数，通常称为 <strong>X(X&amp;)</strong> （"X 的 X ref"）。这个构造函数对于在函数调用过程中控制用户定义类型的值传递和返回至关重要。事实上，它是如此重要，以至于编译器会自动合成一个拷贝构造函数，如果你自己不提供的话.</p>
+<h3 id="passing--returning-by-value按值传递和返回"><a class="header" href="#passing--returning-by-value按值传递和返回">Passing &amp; returning by value(按值传递和返回)</a></h3>
+<p>要理解复制构造函数的必要性，可以考虑一下 C 语言在函数调用过程中处理按值传递和返回变量的方式。如果你声明了一个函数并进行了函数调用、</p>
+<pre><code class="language-cpp">&gt; int f(int x, char c);
+&gt; int g = f(a, b);
+</code></pre>
+<p>编译器如何知道如何传递和返回这些变量？它就是知道！编译器必须处理的类型范围非常小--<strong>char</strong>、<strong>int</strong>、<strong>float</strong>、<strong>double</strong>以及它们的变体--因此编译器内置了这些信息。</p>
+<p>如果你知道如何用编译器生成汇编代码，并确定调用 <strong>f( )</strong> 函数所生成的语句，你就会得到类似的结果：</p>
+<pre><code class="language-cpp">&gt; push  b
+&gt; push  a
+&gt; call  f()
+&gt; add  sp,4
+&gt; mov  g, register a
+</code></pre>
+<p>为了使代码具有通用性，<strong>b</strong> 和 <strong>a</strong> 的表达式将根据变量是全局变量（在这种情况下，它们将是 <strong>_ b</strong> 和 <strong>_ a</strong>）还是局部变量（编译器将从堆栈指针中索引它们）而有所不同。对于 <strong>g</strong> 的表达式也是如此。调用 <strong>f( )</strong> 的外观取决于您的名称装饰方案，而 "寄存器 a "则取决于 CPU 寄存器在汇编器中的命名方式。不过，代码背后的逻辑是相同的.</p>
+<p>在 C 和 C++ 中，参数首先从右向左推入堆栈，然后进行函数调用。调用代码负责将参数从堆栈中清除（这也是 <strong>add sp,4</strong> 的原因）。但请注意，如果要按值传递参数，编译器只需在堆栈中推送副本即可--编译器知道参数有多大，推送这些参数可以准确地复制参数。</p>
+<p><strong>f( )</strong> 的返回值放在寄存器中。同样，编译器知道关于返回值类型的所有信息，因为该类型是内置在语言中的，所以编译器可以通过将其放入寄存器来返回值。对于 C 语言中的基元数据类型，复制值的位就相当于复制对象。</p>
+<h4 id="passing--returning-large-objects--传递和返回大型对象"><a class="header" href="#passing--returning-large-objects--传递和返回大型对象">Passing &amp; returning large objects  (传递和返回大型对象)</a></h4>
+<p>但现在考虑一下用户定义类型。如果你创建了一个类，并想通过值传递该类的一个对象，那么编译器该如何知道该怎么做呢？这不是编译器内置的类型，而是你创建的类型。</p>
+<p>要研究这个问题，可以从一个简单的结构开始，这个结构显然太大，无法用寄存器返回：</p>
+<pre><code class="language-cpp">&gt; //: C11:PassingBigStructures.cpp
+&gt; struct Big {
+&gt;   char buf[100];
+&gt;   int i;
+&gt;   long d;
+&gt; } B, B2;
+&gt; 
+&gt; Big bigfun(Big b) {
+&gt;   b.i = 100; // Do something to the argument
+&gt;   return b;
+&gt; }
+&gt; 
+&gt; int main() {
+&gt;   B2 = bigfun(B);
+&gt; } ///:~
+</code></pre>
+<p>由于大多数编译器都使用 "辅助 "函数，而不是将所有功能内联，因此解码汇编输出在这里要复杂一些。在(<strong>main</strong>)()中，对(<strong>bigfun()</strong>)的调用如你猜测的那样开始--  <strong>B</strong>的全部内容被推入堆栈。(在这里，你可能会看到一些编译器将 <strong>Big</strong> 的地址及其大小载入寄存器，然后调用辅助函数将 <strong>Big</strong> 推入堆栈）。</p>
+<p>在前面的代码片段中，调用函数之前只需要将参数推入堆栈。然而，在<strong>PassingBigStructures.cpp</strong>中，你会看到一个额外的操作：在调用之前，<strong>B2</strong>的地址被推入，尽管它显然不是一个参数。要理解这里发生了什么，你需要了解编译器在进行函数调用时的限制条件。</p>
+<h4 id="function-call-stack-frame函数调用堆栈框架"><a class="header" href="#function-call-stack-frame函数调用堆栈框架">Function-call stack frame(函数调用堆栈框架)</a></h4>
+<p>编译器为函数调用生成代码时，首先会将所有参数推入堆栈，然后进行调用。在函数内部，生成的代码会将堆栈指针向下移动更远，以便为函数的局部变量提供存储空间。(这里的 "向下 "是相对的，机器可能会在推栈过程中增减栈指针）。但是在汇编语言 CALL 时，CPU 会将函数调用的地址推送到程序代码中，因此汇编语言 RETURN 可以使用该地址返回调用点。这个地址当然非常重要，因为如果没有它，你的程序就会完全丢失。下面是函数 CALL 和分配局部变量存储空间后的堆栈框架：</p>
+<div style = "text-align: center;">
+<img src="D:\mbook\TICPP\src\TICPP\schema\11\TV1.gif" alt="图片alt" title="图片title"></div>
+<p>为函数其余部分生成的代码希望内存完全按照这种方式布局，这样它就可以仔细地从函数参数和局部变量中挑选，而不会触及返回地址。在函数调用的过程中，函数所使用的所有内存块都被称为_函数框架_。</p>
+<p>你可能会认为尝试在堆栈上返回值是合理的。编译器可以简单地将其推入，函数可以返回一个偏移量，以指示返回值在堆栈中的起始位置。</p>
+<h4 id="re-entrancy重定向"><a class="header" href="#re-entrancy重定向">Re-entrancy(重定向)</a></h4>
+<p>之所以会出现这个问题，是因为 C 和 C++ 中的函数支持中断；也就是说，这两种语言是_重入的_。它们还支持递归函数调用。这意味着在程序执行的任何时候都可能发生中断而不会中断程序。当然，编写中断服务例程（ISR）的人要负责保存和恢复 ISR 中使用的所有寄存器，但如果 ISR 需要使用堆栈中的任何内存，这必须是一件安全的事情。(可以将 ISR 视为一个普通函数，没有参数，返回值为 <strong>void</strong> ，用于保存和恢复 CPU 状态。ISR 函数调用由某些硬件事件触发，而不是在程序中明确调用）。</p>
+<p>现在想象一下，如果一个普通函数试图返回堆栈上的值，会发生什么。你不能触及堆栈中返回地址上方的任何部分，因此函数必须将值推到返回地址下方。但在执行汇编语言 RETURN 时，堆栈指针必须指向返回地址（或返回地址的正下方，具体取决于机器），因此在执行 RETURN 之前，函数必须将堆栈指针向上移动，从而清空所有局部变量。如果你试图返回堆栈中低于返回地址的值，那么此时你就会变得很脆弱，因为中断可能会出现。ISR 会向下移动堆栈指针，以保存其返回地址和局部变量，并覆盖你的返回值。</p>
+<p>为了解决这个问题，调用者_可以_负责在调用函数之前为返回值在堆栈上分配额外的存储空间。然而，C 语言并不是这样设计的，C++ 必须与之兼容。我们很快就会看到，C++ 编译器使用了一种更有效的方案。</p>
+<p>你的下一个想法可能是在某个全局数据区中返回值，但这也行不通。重入意味着任何函数都可以成为任何其他函数的中断例程，包括你当前所在的函数。因此，如果将返回值放在全局区域中，可能会返回到同一函数中，从而覆盖该返回值。同样的逻辑也适用于递归。</p>
+<p>唯一安全的返回值存放位置是寄存器，因此又回到了寄存器容量不足以存放返回值时该怎么办的问题。答案是将返回值的目标地址作为函数参数之一推入堆栈，然后让函数直接将返回信息复制到目标地址。这不仅能解决所有问题，而且效率更高。这也是<strong>PassingBigStructures.cpp</strong>中，编译器在<strong>main( )</strong> 中调用<strong>bigfun()</strong> 之前推送<strong>B2</strong>地址的原因。如果查看<strong>bigfun( )</strong> 的汇编输出，就会发现它期望得到这个隐藏参数，并在函数内部执行复制到目标地址的操作。</p>
+<h4 id="bitcopy-versus-initialization--bitcopy-与初始化"><a class="header" href="#bitcopy-versus-initialization--bitcopy-与初始化">Bitcopy versus initialization  (Bitcopy 与初始化)</a></h4>
+<p>到目前为止，一切顺利。我们有了一个传递和返回大型简单结构的可行过程。但请注意，你所拥有的只是一种将比特从一个地方复制到另一个地方的方法，这对于 C 语言看待变量的原始方式来说当然是行之有效的。但在 C++ 中，对象可能比比特补丁复杂得多；它们是有意义的。这种意义可能不会对比特的复制做出很好的反应。</p>
+<p>请看一个简单的例子：一个类知道在同一时间有多少个与其类型相同的对象存在。通过第 10 章的学习，我们知道实现这一目的的方法是加入一个 <strong>static</strong> 数据成员：</p>
+<pre><code class="language-cpp"> //: C11:HowMany.cpp
+&gt; // A class that counts its objects
+&gt; #include &lt;fstream&gt;
+&gt; #include &lt;string&gt;
+&gt; using namespace std;
+&gt; ofstream out("HowMany.out");
+&gt; 
+&gt; class HowMany {
+&gt;   static int objectCount;
+&gt; public:
+&gt;   HowMany() { objectCount++; }
+&gt;   static void print(const string&amp; msg = "") {
+&gt;     if(msg.size() != 0) out &lt;&lt; msg &lt;&lt; ": ";
+&gt;     out &lt;&lt; "objectCount = "
+&gt;          &lt;&lt; objectCount &lt;&lt; endl;
+&gt;   }
+&gt;   ~HowMany() {
+&gt;     objectCount--;
+&gt;     print("~HowMany()");
+&gt;   }
+&gt; };
+&gt; 
+&gt; int HowMany::objectCount = 0;
+&gt; 
+&gt; // Pass and return BY VALUE:
+&gt; HowMany f(HowMany x) {
+&gt;   x.print("x argument inside f()");
+&gt;   return x;
+&gt; }
+&gt; 
+&gt; int main() {
+&gt;   HowMany h;
+&gt;   HowMany::print("after construction of h");
+&gt;   HowMany h2 = f(h);
+&gt;   HowMany::print("after call to f()");
+&gt; } ///:~
+</code></pre>
+<p>类 <strong>HowMany</strong> 包含一个 <strong>static</strong> <strong>int objectCount</strong> 和一个 <strong>static</strong> 成员函数 <strong>print( )</strong> 用于报告 <strong>objectCount</strong> 的值，以及一个可选的消息参数。每次创建对象时，构造函数都会递增计数，而析构函数则会递减计数。</p>
+<p>然而，输出结果却不尽如人意：</p>
+<pre><code class="language-cpp">&gt; after construction of h: objectCount = 1
+&gt; x argument inside f(): objectCount = 1
+&gt; ~HowMany(): objectCount = 0
+&gt; after call to f(): objectCount = 0
+&gt; ~HowMany(): objectCount = -1
+&gt; ~HowMany(): objectCount = -2
+</code></pre>
+<p>创建<strong>h</strong>后，对象数是一个，这没有问题。但在调用 <strong>f( )</strong> 后，由于 <strong>h2</strong> 现在也在作用域中，因此对象计数应该是 2。但结果却是零，这说明出了大问题。最后的两个析构函数使对象计数变为负数，这也证实了这一点，而这是绝对不应该发生的。</p>
+<p>请看 <strong>f()</strong> 内部的一点，它发生在参数通过值传递之后。这意味着原始对象<strong>h</strong>存在于函数框架之外，而在函数框架内还有一个额外的对象，即通过值传递的副本。然而，参数的传递使用了 C 语言最原始的位拷贝概念，而 C++ 的 <strong>HowMany</strong> 类需要真正的初始化来保持其完整性，因此默认的位拷贝无法产生预期的效果。</p>
+<p>当本地对象在调用 <strong>f( )</strong> 结束时退出作用域，析构函数被调用，析构函数会递减 <strong>对象计数</strong>，因此在函数外部，<strong>对象计数</strong>为零。<strong>h2</strong> 的创建也是通过位拷贝完成的，因此也没有调用构造函数，当 <strong>h</strong> 和 <strong>h2</strong> 退出作用域时，它们的析构函数会导致 <strong>objectCount</strong> 为负值。</p>
+<h3 id="copy-construction复制构造"><a class="header" href="#copy-construction复制构造">Copy-construction(复制构造)</a></h3>
+<p>出现这个问题的原因是编译器对如何从现有对象创建_新对象_做出了假设。当您通过值传递一个对象时，您会从一个现有对象（即函数框架外的原始对象）创建一个新对象，即函数框架内的传递对象。当从函数返回一个对象时，通常也是如此。在表达式</p>
+<pre><code class="language-cpp">&gt; HowMany h2 = f(h);
+</code></pre>
+<p><strong>h2</strong>是一个先前未构造的对象，它是根据<strong>f( )</strong> 的返回值创建的，因此又是从一个现有对象创建了一个新对象。</p>
+<p>编译器的假设是，你希望使用位拷贝来执行创建，在很多情况下这可能行得通，但在<strong>HowMany</strong>中却行不通，因为初始化的意义远不止拷贝这么简单。另一个常见的例子是，如果类中包含指针--它们指向什么？</p>
+<p>幸运的是，您可以干预这一过程，防止编译器进行位拷贝。为此，你可以定义自己的函数，当编译器需要从现有对象中创建一个新对象时，就可以使用这个函数。从逻辑上讲，你正在创建一个新对象，所以这个函数是一个构造函数，从逻辑上讲，这个构造函数的唯一参数与你正在构造的对象有关。但是，这个对象不能通过值传递给构造函数，因为你正在尝试_定义_处理通过值传递的函数，而且从语法上讲，传递指针是没有意义的，因为毕竟你是从一个现有对象创建新对象的。这时，引用就派上用场了，你可以获取源对象的引用。这个函数被称为_copy-constructor_，通常被称为 <strong>X(X&amp;)</strong>，这是它在一个名为 <strong>X</strong>的类中的外观。</p>
+<p>如果创建了复制构造函数，编译器在从现有对象创建新对象时将不会执行位拷贝。它会一直调用你的复制构造函数。因此，如果不创建拷贝构造函数，编译器会做一些合理的事情，但你可以选择完全控制整个过程。</p>
+<p>现在可以在 <strong>HowMany.cpp</strong>中解决这个问题了：</p>
+<pre><code class="language-cpp">&gt; //: C11:HowMany2.cpp
+&gt; // The copy-constructor
+&gt; #include &lt;fstream&gt;
+&gt; #include &lt;string&gt;
+&gt; using namespace std;
+&gt; ofstream out("HowMany2.out");
+&gt; 
+&gt; class HowMany2 {
+&gt;   string name; // Object identifier
+&gt;   static int objectCount;
+&gt; public:
+&gt;   HowMany2(const string&amp; id = "") : name(id) {
+&gt;     ++objectCount;
+&gt;     print("HowMany2()");
+&gt;   }
+&gt;   ~HowMany2() {
+&gt;     --objectCount;
+&gt;     print("~HowMany2()");
+&gt;   }
+&gt;   // The copy-constructor:
+&gt;   HowMany2(const HowMany2&amp; h) : name(h.name) {
+&gt;     name += " copy";
+&gt;     ++objectCount;
+&gt;     print("HowMany2(const HowMany2&amp;)");
+&gt;   }
+&gt;   void print(const string&amp; msg = "") const {
+&gt;     if(msg.size() != 0) 
+&gt;       out &lt;&lt; msg &lt;&lt; endl;
+&gt;     out &lt;&lt; '\t' &lt;&lt; name &lt;&lt; ": "
+&gt;         &lt;&lt; "objectCount = "
+&gt;         &lt;&lt; objectCount &lt;&lt; endl;
+&gt;   }
+&gt; };
+&gt; 
+&gt; int HowMany2::objectCount = 0;
+&gt; 
+&gt; // Pass and return BY VALUE:
+&gt; HowMany2 f(HowMany2 x) {
+&gt;   x.print("x argument inside f()");
+&gt;   out &lt;&lt; "Returning from f()" &lt;&lt; endl;
+&gt;   return x;
+&gt; }
+&gt; 
+&gt; int main() {
+&gt;   HowMany2 h("h");
+&gt;   out &lt;&lt; "Entering f()" &lt;&lt; endl;
+&gt;   HowMany2 h2 = f(h);
+&gt;   h2.print("h2 after call to f()");
+&gt;   out &lt;&lt; "Call f(), no return value" &lt;&lt; endl;
+&gt;   f(h);
+&gt;   out &lt;&lt; "After call to f()" &lt;&lt; endl;
+&gt; } ///:~
+</code></pre>
+<p>为了让你更清楚地了解发生了什么，这里加入了一些新的变化。首先，在打印有关对象的信息时，<strong>字符串</strong> <strong>name</strong>将充当对象的标识符。在构造函数中，你可以输入一个标识符字符串（通常是对象的名称），然后使用<strong>string</strong>构造函数将其复制到<strong>name</strong>中。默认<code>= ""</code> 会创建一个空 <strong>字符串</strong>。与之前一样，构造函数会递增<strong>objectCount</strong>，而析构函数则会递减。</p>
+<p>接下来是复制构造函数，<strong>HowMany2(const HowMany2&amp;)</strong>。拷贝构造函数只能从现有对象创建一个新对象，因此现有对象的名称会被拷贝到 <strong>name</strong>，后面跟着 "拷贝 "一词，这样你就能看到它是从哪里来的了。如果你仔细观察，就会发现构造函数初始化列表中的<strong>name(h.name)</strong> 调用实际上是在调用<strong>string</strong>复制构造函数。</p>
+<p>在复制构造函数中，对象计数会递增，就像在普通构造函数中一样。这意味着在按值传递和返回时，你将获得准确的对象计数。</p>
+<p>对 <strong>print( )</strong> 函数进行了修改，以打印出一条信息、对象标识符和对象计数。现在，该函数必须访问特定对象的<strong>名称</strong>数据，因此不再是<strong>静态</strong>成员函数。</p>
+<p>在 <strong>main()</strong> 内部，您可以看到对 <strong>f( )</strong> 的第二次调用。不过，这次调用使用了 C 语言常用的忽略返回值的方法。既然你已经知道返回值是如何返回的（即函数内部的代码处理返回过程，将结果放入一个目标地址中，该地址作为隐藏参数传递），你可能会想知道当返回值被忽略时会发生什么。程序的输出会给我们一些启示。</p>
+<p>在显示输出结果之前，这里有一个使用 iostreams 为任何文件添加行号的小程序：</p>
+<pre><code class="language-cpp">&gt; //: C11:Linenum.cpp
+&gt; //{T} Linenum.cpp
+&gt; // Add line numbers
+&gt; #include "../require.h"
+&gt; #include &lt;vector&gt;
+&gt; #include &lt;string&gt;
+&gt; #include &lt;fstream&gt;
+&gt; #include &lt;iostream&gt;
+&gt; #include &lt;cmath&gt;
+&gt; using namespace std;
+&gt; 
+&gt; int main(int argc, char* argv[]) {
+&gt;   requireArgs(argc, 1, "Usage: linenum file\n"
+&gt;     "Adds line numbers to file");
+&gt;   ifstream in(argv[1]);
+&gt;   assure(in, argv[1]);
+&gt;   string line;
+&gt;   vector&lt;string&gt; lines;
+&gt;   while(getline(in, line)) // Read in entire file
+&gt;     lines.push_back(line);
+&gt;   if(lines.size() == 0) return 0;
+&gt;   int num = 0;
+&gt;   // Number of lines in file determines width:
+&gt;   const int width = 
+&gt;     int(log10((double)lines.size())) + 1;
+&gt;   for(int i = 0; i &lt; lines.size(); i++) {
+&gt;     cout.setf(ios::right, ios::adjustfield);
+&gt;     cout.width(width);
+&gt;     cout &lt;&lt; ++num &lt;&lt; ") " &lt;&lt; lines[i] &lt;&lt; endl;
+&gt;   }
+&gt; } ///:~
+</code></pre>
+<p>整个文件会被读入一个<code>vector &lt;string&gt;</code>中，使用的代码与本书前面的代码相同。在打印行号时，我们希望所有的行都能相互对齐，这就需要调整文件的行数，使行号的宽度保持一致。我们可以使用 <strong>vector::size( )</strong> 方便地确定行数，但我们真正需要知道的是文件是否超过 10 行、100 行、1000 行等。如果取文件行数的对数（以 10 为底），截断为一个 <strong>整数</strong>，然后在该值上加 1，就能得出行数的最大宽度。</p>
+<p>你会发现在 <strong>for</strong> 循环内有几个奇怪的调用：<strong>setf( )</strong> 和 <strong>width( )</strong> 。这些是<strong>流</strong>调用，允许你控制输出的对齐方式和宽度。不过，每次输出一行时都必须调用它们，这也是它们位于 <strong>for</strong> 循环内部的原因。本书第 2 卷有一整章解释 iostreams，将告诉你更多关于这些调用以及控制 iostreams 的其他方法。</p>
+<p>将 <strong>Linenum.cpp</strong>应用于 <strong>HowMany2.out</strong>，结果是</p>
+<pre><code class="language-cpp">&gt;  1) HowMany2()
+&gt;  2)   h: objectCount = 1
+&gt;  3) Entering f()
+&gt;  4) HowMany2(const HowMany2&amp;)
+&gt;  5)   h copy: objectCount = 2
+&gt;  6) x argument inside f()
+&gt;  7)   h copy: objectCount = 2
+&gt;  8) Returning from f()
+&gt;  9) HowMany2(const HowMany2&amp;)
+&gt; 10)   h copy copy: objectCount = 3
+&gt; 11) ~HowMany2()
+&gt; 12)   h copy: objectCount = 2
+&gt; 13) h2 after call to f()
+&gt; 14)   h copy copy: objectCount = 2
+&gt; 15) Call f(), no return value
+&gt; 16) HowMany2(const HowMany2&amp;)
+&gt; 17)   h copy: objectCount = 3
+&gt; 18) x argument inside f()
+&gt; 19)   h copy: objectCount = 3
+&gt; 20) Returning from f()
+&gt; 21) HowMany2(const HowMany2&amp;)
+&gt; 22)   h copy copy: objectCount = 4
+&gt; 23) ~HowMany2()
+&gt; 24)   h copy: objectCount = 3
+&gt; 25) ~HowMany2()
+&gt; 26)   h copy copy: objectCount = 2
+&gt; 27) After call to f()
+&gt; 28) ~HowMany2()
+&gt; 29)   h copy copy: objectCount = 1
+&gt; 30) ~HowMany2()
+&gt; 31)   h: objectCount = 0
+</code></pre>
+<p>正如你所预料的，首先发生的是调用<strong>h</strong>的正常构造函数，将对象计数递增到 1。但是，当输入 <strong>f( )</strong> 时，编译器会悄悄调用复制构造函数来执行逐值传递。在 <strong>f( )</strong> 的函数框架内创建了一个新对象，它是 <strong>h</strong> 的副本（因此称为 "h 副本"），因此对象数变成了两个，这是复制构造函数的功劳。</p>
+<p>第八行表示从 <strong>f( )</strong> 返回的开始。但是，在局部变量 "h copy "被销毁（在函数结束时退出作用域）之前，它必须被复制到返回值中，而返回值恰好是 <strong>h2</strong>。一个先前未构造的对象（<strong>h2</strong>）是从一个现有对象（<strong>f( )</strong> 内的局部变量）中创建的，因此在第九行中当然要再次使用复制构造函数。现在，<strong>h2</strong> 的标识符名称变成了 "h copy copy"，因为它是从 <strong>f()</strong> 内部的本地对象拷贝过来的。对象返回后，在函数结束前，对象计数暂时变为 3，但随后本地对象 "h copy "被销毁。在第 13 行完成对 <strong>f( )</strong> 的调用后，只有两个对象，即 <strong>h</strong> 和 <strong>h2</strong>，可以看到 <strong>h2</strong> 最终确实成为了 "h copy 副本"。</p>
+<h4 id="temporary-objects-临时对象"><a class="header" href="#temporary-objects-临时对象">Temporary objects (临时对象)</a></h4>
+<p>第 15 行开始调用 <strong>f(h)</strong>，这次忽略了返回值。从第 16 行可以看到，与之前一样，拷贝构造函数被调用来传递参数。此外，第 21 行显示，与之前一样，拷贝构造函数被调用以获取返回值。但是，拷贝构造函数必须有一个地址作为它的目标地址（一个<strong>this</strong>指针）。这个地址从何而来？</p>
+<p>原来，只要编译器需要一个临时对象来正确评估表达式，它就能创建一个临时对象。在本例中，编译器创建了一个你根本看不到的临时对象，作为 <strong>f( )</strong> 被忽略的返回值的目的地。这个临时对象的生命周期越短越好，这样就不会出现临时对象堆积如山、等待销毁、占用宝贵资源的情况。在某些情况下，临时对象可能会被立即传递给另一个函数，但在这种情况下，函数调用后就不需要它了，所以一旦函数调用结束，调用本地对象的析构函数（第 23 和 24 行），临时对象就会被销毁（第 25 和 26 行）。</p>
+<p>最后，在第 28-31 行中，<strong>h2</strong> 对象被销毁，随后<strong>h</strong> 也被销毁，对象计数正确归零。</p>
+<h3 id="default-copy-constructor默认复制构造函数"><a class="header" href="#default-copy-constructor默认复制构造函数">Default copy-constructor(默认复制构造函数)</a></h3>
+<p>由于拷贝构造函数实现了按值传递和按值返回，因此编译器必须为您创建一个简单结构的拷贝构造函数，这实际上与 C 语言中的做法相同。</p>
+<p>当涉及到更复杂的类型时，如果不创建一个拷贝构造函数，C++ 编译器仍会自动创建一个拷贝构造函数。但是，位拷贝同样没有意义，因为它不一定能实现正确的含义。</p>
+<p>下面的例子可以说明编译器采用的更智能的方法。假设你创建了一个由多个现有类的对象组成的新类。这就是所谓的 "组合"，也是利用现有类创建新类的方法之一。现在，让我们扮演一个天真的用户，他正试图通过这种方法创建一个新类来快速解决问题。你不了解拷贝构造函数，所以你不会创建拷贝构造函数。示例演示了编译器在为新类创建默认复制构造函数时的操作：</p>
+<pre><code class="language-cpp">&gt; //: C11:DefaultCopyConstructor.cpp
+&gt; // Automatic creation of the copy-constructor
+&gt; #include &lt;iostream&gt;
+&gt; #include &lt;string&gt;
+&gt; using namespace std;
+&gt; 
+&gt; class WithCC { // With copy-constructor
+&gt; public:
+&gt;   // Explicit default constructor required:
+&gt;   WithCC() {}
+&gt;   WithCC(const WithCC&amp;) {
+&gt;     cout &lt;&lt; "WithCC(WithCC&amp;)" &lt;&lt; endl;
+&gt;   }
+&gt; };
+&gt; 
+&gt; class WoCC { // Without copy-constructor
+&gt;   string id;
+&gt; public:
+&gt;   WoCC(const string&amp; ident = "") : id(ident) {}
+&gt;   void print(const string&amp; msg = "") const {
+&gt;     if(msg.size() != 0) cout &lt;&lt; msg &lt;&lt; ": ";
+&gt;     cout &lt;&lt; id &lt;&lt; endl;
+&gt;   }
+&gt; };
+&gt; 
+&gt; class Composite {
+&gt;   WithCC withcc; // Embedded objects
+&gt;   WoCC wocc;
+&gt; public:
+&gt;   Composite() : wocc("Composite()") {}
+&gt;   void print(const string&amp; msg = "") const {
+&gt;     wocc.print(msg);
+&gt;   }
+&gt; };
+&gt; 
+&gt; int main() {
+&gt;   Composite c;
+&gt;   c.print("Contents of c");
+&gt;   cout &lt;&lt; "Calling Composite copy-constructor"
+&gt;        &lt;&lt; endl;
+&gt;   Composite c2 = c;  // Calls copy-constructor
+&gt;   c2.print("Contents of c2");
+&gt; } ///:~
+</code></pre>
+<p>类 <strong>WithCC</strong> 包含一个复制构造函数，该构造函数只是宣布它已被调用，这就带来了一个有趣的问题。在<strong>Composite</strong>类中，<strong>WithCC</strong>的对象是使用默认构造函数创建的。如果<strong>WithCC</strong>中没有任何构造函数，编译器就会自动创建一个默认构造函数，在这种情况下什么也做不了。但是，如果您添加了一个复制构造函数，您就告诉了编译器您将处理构造函数的创建，因此编译器将不再为您创建默认构造函数，除非您像<strong>WithCC</strong>那样显式地创建默认构造函数，否则编译器将会抱怨.</p>
+<p>类 <strong>WoCC</strong> 没有复制构造函数，但它的构造函数会在内部 <strong>string</strong> 中存储一条信息，可以使用 <strong>print( )</strong> 打印出来。这个构造函数在<strong>Composite</strong>的构造函数初始化列表中被明确调用（第 8 章简要介绍，第 14 章全面介绍）。这样做的原因稍后会显现出来。</p>
+<p>类 <strong>Composite</strong> 的成员对象包括 <strong>WithCC</strong> 和 <strong>WoCC</strong>（注意嵌入对象 <strong>wocc</strong> 必须在构造函数初始化列表中初始化），但没有明确定义的复制构造函数。不过，在 <strong>main( )</strong> 中，使用定义中的复制构造函数创建了一个对象：</p>
+<pre><code class="language-cpp">&gt; Composite c2 = c;
+</code></pre>
+<p>编译器会自动创建<strong>Composite</strong>的拷贝构造函数，程序的输出会显示创建的方式：</p>
+<pre><code class="language-cpp">&gt; Contents of c: Composite()
+&gt; Calling Composite copy-constructor
+&gt; WithCC(WithCC&amp;)
+&gt; Contents of c2: Composite()
+</code></pre>
+<p>要为使用组合（以及第 14 章介绍的继承）的类创建拷贝构造函数，编译器会递归调用所有成员对象和基类的拷贝构造函数。也就是说，如果成员对象还包含另一个对象，它的复制构造函数也会被调用。因此，在本例中，编译器调用了 <strong>WithCC</strong> 的拷贝构造函数。输出结果显示了该构造函数被调用。由于 <strong>WoCC</strong> 没有拷贝构造函数，编译器为它创建了一个只执行位拷贝的构造函数，并在 <strong>Composite</strong> 的拷贝构造函数中调用。main 中对 <strong>Composite::print( )</strong> 的调用说明了这一点，因为 <strong>c2.wocc</strong> 的内容与 <strong>c.wocc</strong> 的内容完全相同。编译器合成拷贝构造函数的过程称为_memberwise initialization_（成员初始化）。</p>
+<p>最好是创建自己的复制构造函数，而不是让编译器代劳。这样可以确保它在你的控制之下。</p>
+<h3 id="alternatives-to-copy-construction复制构建的替代方案"><a class="header" href="#alternatives-to-copy-construction复制构建的替代方案">Alternatives to copy-construction(复制构建的替代方案)</a></h3>
+<p>说到这里，你可能会头晕目眩，你可能会想，如果不知道复制构造函数，你怎么可能写出一个能正常工作的类呢？但是请记住：只有当你要通过值传递类的对象时，你才需要拷贝构造函数。如果这种情况从未发生过，那么就不需要拷贝构造函数。</p>
+<h4 id="preventing-pass-by-value防止逐值传递"><a class="header" href="#preventing-pass-by-value防止逐值传递">Preventing pass-by-value(防止逐值传递)</a></h4>
+<p>"但是，"你说，"如果我不创建一个复制构造函数，编译器就会为我创建一个。那我怎么知道对象永远不会以值传递呢？</p>
+<p>防止逐值传递有一个简单的方法：声明一个<strong>私有</strong>的复制构造函数。你甚至不需要创建定义，除非你的某个成员函数或<strong>友</strong>函数需要执行逐值传递。如果用户试图按值传递或返回对象，编译器将产生一条错误信息，因为拷贝构造函数是<strong>私有</strong>的。编译器无法再创建默认的拷贝构造函数，因为您已明确声明您将接管这项工作。</p>
+<p>这里有一个例子：</p>
+<pre><code class="language-cpp">&gt; //: C11:NoCopyConstruction.cpp
+&gt; // Preventing copy-construction
+&gt; 
+&gt; class NoCC {
+&gt;   int i;
+&gt;   NoCC(const NoCC&amp;); // No definition
+&gt; public:
+&gt;   NoCC(int ii = 0) : i(ii) {}
+&gt; };
+&gt; 
+&gt; void f(NoCC);
+&gt; 
+&gt; int main() {
+&gt;   NoCC n;
+&gt; //! f(n); // Error: copy-constructor called
+&gt; //! NoCC n2 = n; // Error: c-c called
+&gt; //! NoCC n3(n); // Error: c-c called
+&gt; } ///:~
+</code></pre>
+<p>注意使用了更一般的形式</p>
+<pre><code class="language-cpp">&gt; NoCC(const NoCC&amp;);
+</code></pre>
+<p>使用 <strong>const</strong>.</p>
+<h4 id="functions-that-modify-outside-objects-修改外部对象的函数"><a class="header" href="#functions-that-modify-outside-objects-修改外部对象的函数">Functions that modify outside objects (修改外部对象的函数)</a></h4>
+<p>引用语法比指针语法好用，但它会模糊读者的理解。例如，在 iostreams 库中，<strong>get( )</strong> 函数的一个重载版本将一个 <strong>char&amp;</strong> 作为参数，而该函数的全部意义在于通过插入 <strong>get( )</strong> 的结果来修改其参数。然而，当你阅读使用该函数的代码时，并不能立即看出外部对象被修改了：</p>
+<pre><code class="language-cpp">&gt; char c;
+&gt; cin.get(c); 
+</code></pre>
+<p>相反，函数调用看起来像逐值传递，这表明外部对象没有被修改。</p>
+<p>因此，从代码维护的角度来看，在传递要修改的参数地址时使用指针可能更安全。如果你总是将地址作为 <strong>const</strong> 引用来传递，除非你打算通过地址来修改外部对象，这时你传递的是非<strong>const</strong>指针，那么你的代码就更容易被读者理解了。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../TICPP/11/11.2.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../../TICPP/11/11.4.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../TICPP/11/11.2.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../../TICPP/11/11.4.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../../elasticlunr.min.js"></script>
+        <script src="../../mark.min.js"></script>
+        <script src="../../searcher.js"></script>
+
+        <script src="../../clipboard.min.js"></script>
+        <script src="../../highlight.js"></script>
+        <script src="../../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
