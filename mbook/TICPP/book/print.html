@@ -89,7 +89,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="TICPP/11/11.0.html"><strong aria-hidden="true">1.</strong> 11.References & the Copy-Constructor)</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="TICPP/11/11.1.html"><strong aria-hidden="true">1.1.</strong> 11.1C++ 中的指针</a></li><li class="chapter-item expanded "><a href="TICPP/11/11.2.html"><strong aria-hidden="true">1.2.</strong> 11.2C++ 中的引用</a></li><li class="chapter-item expanded "><a href="TICPP/11/11.3.html"><strong aria-hidden="true">1.3.</strong> 11.3拷贝构造函数</a></li><li class="chapter-item expanded "><a href="TICPP/11/11.4.html"><strong aria-hidden="true">1.4.</strong> 11.成员指针</a></li><li class="chapter-item expanded "><a href="TICPP/11/11.5.html"><strong aria-hidden="true">1.5.</strong> 11.Summary</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="TICPP/11/11.0.html"><strong aria-hidden="true">1.</strong> 11.References & the Copy-Constructor)</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="TICPP/11/11.1.html"><strong aria-hidden="true">1.1.</strong> 11.1C++ 中的指针</a></li><li class="chapter-item expanded "><a href="TICPP/11/11.2.html"><strong aria-hidden="true">1.2.</strong> 11.2C++ 中的引用</a></li><li class="chapter-item expanded "><a href="TICPP/11/11.3.html"><strong aria-hidden="true">1.3.</strong> 11.3拷贝构造函数</a></li><li class="chapter-item expanded "><a href="TICPP/11/11.4.html"><strong aria-hidden="true">1.4.</strong> 11.成员指针</a></li><li class="chapter-item expanded "><a href="TICPP/11/11.5.html"><strong aria-hidden="true">1.5.</strong> 11.Summary</a></li></ol></li><li class="chapter-item expanded "><a href="TICPP/12/12.0.html"><strong aria-hidden="true">2.</strong> 12.Operator Overloading)</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="TICPP/12/12.1.html"><strong aria-hidden="true">2.1.</strong> 12.1警告与保证</a></li><li class="chapter-item expanded "><a href="TICPP/12/12.2.html"><strong aria-hidden="true">2.2.</strong> 12.2语法</a></li><li class="chapter-item expanded "><a href="TICPP/12/12.3.html"><strong aria-hidden="true">2.3.</strong> 12.3可重载操作符</a></li><li class="chapter-item expanded "><a href="TICPP/12/12.4.html"><strong aria-hidden="true">2.4.</strong> 12.4非成员操作符</a></li><li class="chapter-item expanded "><a href="TICPP/12/12.5.html"><strong aria-hidden="true">2.5.</strong> 12.5重载赋值</a></li><li class="chapter-item expanded "><a href="TICPP/12/12.6.html"><strong aria-hidden="true">2.6.</strong> 12.6自动类型转换</a></li><li class="chapter-item expanded "><a href="TICPP/12/12.7.html"><strong aria-hidden="true">2.7.</strong> 12.7构造器转换</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -769,6 +769,1693 @@ int main() {
 <p>C++ 还添加了 Algol 和 Pascal 中的 <em>reference</em>，它就像一个常量指针，会被编译器自动取消引用。引用持有一个地址，但你可以像对待对象一样对待它。引用对于使用操作符重载（下一章的主题）的简洁语法至关重要，同时也为普通函数传递和返回对象提供了语法上的便利。</p>
 <p>复制构造函数的参数是一个同类型现有对象的引用，它用于从现有对象创建一个新对象。当您传递或返回一个对象时，编译器会自动调用复制构造函数。虽然编译器会自动为你创建一个复制构造函数，但如果你认为你的类需要一个复制构造函数，你应该自己定义它，以确保发生正确的行为。如果不希望通过值传递或返回对象，则应创建一个私有的复制构造函数。</p>
 <p>指向成员的指针具有与普通指针相同的功能：您可以在运行时选择特定的存储区域（数据或函数）。指向成员的指针只是与类成员协同工作，而不是与全局数据或函数协同工作。您可以获得编程的灵活性，从而在运行时改变行为。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="12-operator-overloading-操作符重载"><a class="header" href="#12-operator-overloading-操作符重载">12: Operator Overloading (操作符重载)</a></h1>
+<p><strong>操作符重载只是一种 "语法糖"，也就是说，它只是函数调用的另一种方式。</strong></p>
+<p>不同之处在于，该函数的参数不在括号内，而是环绕在你一直认为是不可变运算符的字符周围或旁边。</p>
+<p>运算符的使用与普通函数调用有两点不同。语法不同；运算符的 "调用 "通常是将其放在参数之间，有时甚至放在参数之后。第二个区别是，编译器会决定调用哪个 "函数"。例如，如果使用运算符 + 并带有浮点参数，编译器会 "调用 "函数来执行浮点加法（这种 "调用 "通常是插入内联代码的行为，或者是浮点处理器指令）。如果对浮点数和整数使用运算符 +，编译器会 "调用 "一个特殊函数将 int 变为浮点数，然后再 "调用 "浮点加法代码。</p>
+<p>但在 C++ 中，我们可以定义新的操作符来处理类。这种定义与普通的函数定义一样，只是函数名称由关键字 operator 和操作符组成。这就是唯一的区别，它将成为一个与其他函数一样的函数，当编译器看到适当的模式时就会调用它。</p>
+<div style="break-before: page; page-break-before: always;"></div><h2 id="warning--reassurance-警告与保证"><a class="header" href="#warning--reassurance-警告与保证">Warning &amp; reassurance (警告与保证)</a></h2>
+<p>很容易让人变得过于狂热。起初，这是一个有趣的玩具。但请记住，它只是语法糖，是调用函数的另一种方式。从这个角度看，你没有理由重载一个操作符，除非它能使涉及你的类的代码更容易编写，尤其是更容易_阅读_。(记住，代码的阅读量要远远大于它的编写量。</p>
+<p>操作符重载的另一个常见反应是恐慌；突然间，C 操作符不再具有我们熟悉的意义了。"一切都变了，我所有的 C 代码都将做不同的事情！"事实并非如此。在只包含内置数据类型的表达式中使用的所有运算符都不能改变。您永远无法重载操作符，从而</p>
+<pre><code class="language-cpp">&gt; 1 &lt;&lt; 4;
+</code></pre>
+<p>行为不同，或</p>
+<pre><code class="language-cpp">&gt; 1.414 &lt;&lt; 2;
+</code></pre>
+<p>有意义。只有包含用户定义类型的表达式才能使用重载操作符。</p>
+<div style="break-before: page; page-break-before: always;"></div><h2 id="syntax-语法"><a class="header" href="#syntax-语法">Syntax (语法)</a></h2>
+<p>定义重载运算符就像定义函数一样，但函数的名称是 <strong>operator@</strong>，其中 <strong>@</strong> 代表被重载的运算符。重载运算符参数列表中的参数个数取决于两个因素：</p>
+<ol>
+<li>无论是一元运算符（一个参数）还是二元运算符（两个参数）。</li>
+<li>操作符是定义为全局函数（一元函数为一个参数，二元函数为两个参数）还是成员函数（一元函数为零参数，二元函数为一个参数--对象成为左侧参数）。</li>
+</ol>
+<p>下面这个小类展示了操作符重载的语法：</p>
+<pre><code class="language-cpp">&gt; //: C12:OperatorOverloadingSyntax.cpp
+&gt; #include &lt;iostream&gt;
+&gt; using namespace std;
+&gt; 
+&gt; class Integer {
+&gt;   int i;
+&gt; public:
+&gt;   Integer(int ii) : i(ii) {}
+&gt;   const Integer
+&gt;   operator+(const Integer&amp; rv) const {
+&gt;     cout &lt;&lt; "operator+" &lt;&lt; endl;
+&gt;     return Integer(i + rv.i);
+&gt;   }
+&gt;   Integer&amp;
+&gt;   operator+=(const Integer&amp; rv) {
+&gt;     cout &lt;&lt; "operator+=" &lt;&lt; endl;
+&gt;     i += rv.i;
+&gt;     return *this;
+&gt;   }
+&gt; };
+&gt; 
+&gt; int main() {
+&gt;   cout &lt;&lt; "built-in types:" &lt;&lt; endl;
+&gt;   int i = 1, j = 2, k = 3;
+&gt;   k += i + j;
+&gt;   cout &lt;&lt; "user-defined types:" &lt;&lt; endl;
+&gt;   Integer ii(1), jj(2), kk(3);
+&gt;   kk += ii + jj;
+&gt; } ///:~
+</code></pre>
+<p>这两个重载运算符被定义为内联成员函数，在调用时会发布公告。对于二元操作符来说，单个参数出现在操作符的右侧。一元运算符定义为成员函数时没有参数。成员函数是为操作符左侧的对象调用的。</p>
+<p>对于非条件运算符（条件运算符通常返回一个布尔值），如果两个参数的类型相同，则几乎总是希望返回一个与操作类型相同的对象或引用。(如果两个参数不是同一类型，那就由你来解释它应该产生什么结果）。这样就可以建立复杂的表达式：</p>
+<pre><code class="language-cpp">&gt; kk += ii + jj;
+</code></pre>
+<p><strong>operator+</strong> 产生一个新的 <strong>Integer</strong>（临时），用作 <strong>operator+=</strong> 的 <strong>rv</strong> 参数。一旦不再需要这个临时值，它就会被销毁。</p>
+<div style="break-before: page; page-break-before: always;"></div><h2 id="overloadable-operators-可重载操作符"><a class="header" href="#overloadable-operators-可重载操作符">Overloadable operators (可重载操作符)</a></h2>
+<p>虽然您可以重载 C 语言中几乎所有可用的运算符，但运算符重载的使用受到相当大的限制。特别是，您不能组合目前在 C 语言中没有意义的运算符（例如用 ****** 表示幂级数），不能更改运算符的求值优先级，也不能更改运算符所需的参数数。这样做是有道理的--所有这些操作都会产生混淆而非澄清意义的运算符。</p>
+<p>接下来的两个小节将举例说明所有 "常规 "运算符，并以您最可能使用的形式进行重载。</p>
+<h3 id="unary-operators-一元运算符"><a class="header" href="#unary-operators-一元运算符">Unary operators (一元运算符)</a></h3>
+<p>下面的示例展示了以全局函数（非成员 <strong>friend</strong> 函数）和成员函数的形式重载所有一元运算符的语法。这将扩展之前显示的 <strong>Integer</strong> 类，并添加一个新的 <strong>byte</strong> 类。特定运算符的含义取决于您使用它们的方式，但在做意想不到的事情之前，请考虑一下客户程序员。<br />
+Here is a catalog of all the unary functions:</p>
+<pre><code class="language-cpp">&gt; //: C12:OverloadingUnaryOperators.cpp
+&gt; #include &lt;iostream&gt;
+&gt; using namespace std;
+&gt; 
+&gt; // Non-member functions:
+&gt; class Integer {
+&gt;   long i;
+&gt;   Integer* This() { return this; }
+&gt; public:
+&gt;   Integer(long ll = 0) : i(ll) {}
+&gt;   // No side effects takes const&amp; argument:
+&gt;   friend const Integer&amp;
+&gt;     operator+(const Integer&amp; a);
+&gt;   friend const Integer
+&gt;     operator-(const Integer&amp; a);
+&gt;   friend const Integer
+&gt;     operator~(const Integer&amp; a);
+&gt;   friend Integer*
+&gt;     operator&amp;(Integer&amp; a);
+&gt;   friend int
+&gt;     operator!(const Integer&amp; a);
+&gt;   // Side effects have non-const&amp; argument:
+&gt;   // Prefix:
+&gt;   friend const Integer&amp;
+&gt;     operator++(Integer&amp; a);
+&gt;   // Postfix:
+&gt;   friend const Integer
+&gt;     operator++(Integer&amp; a, int);
+&gt;   // Prefix:
+&gt;   friend const Integer&amp;
+&gt;     operator--(Integer&amp; a);
+&gt;   // Postfix:
+&gt;   friend const Integer
+&gt;     operator--(Integer&amp; a, int);
+&gt; };
+&gt; 
+&gt; // Global operators:
+&gt; const Integer&amp; operator+(const Integer&amp; a) {
+&gt;   cout &lt;&lt; "+Integer\n";
+&gt;   return a; // Unary + has no effect
+&gt; }
+&gt; const Integer operator-(const Integer&amp; a) {
+&gt;   cout &lt;&lt; "-Integer\n";
+&gt;   return Integer(-a.i);
+&gt; }
+&gt; const Integer operator~(const Integer&amp; a) {
+&gt;   cout &lt;&lt; "~Integer\n";
+&gt;   return Integer(~a.i);
+&gt; }
+&gt; Integer* operator&amp;(Integer&amp; a) {
+&gt;   cout &lt;&lt; "&amp;Integer\n";
+&gt;   return a.This(); // &amp;a is recursive!
+&gt; }
+&gt; int operator!(const Integer&amp; a) {
+&gt;   cout &lt;&lt; "!Integer\n";
+&gt;   return !a.i;
+&gt; }
+&gt; // Prefix; return incremented value
+&gt; const Integer&amp; operator++(Integer&amp; a) {
+&gt;   cout &lt;&lt; "++Integer\n";
+&gt;   a.i++;
+&gt;   return a;
+&gt; }
+&gt; // Postfix; return the value before increment:
+&gt; const Integer operator++(Integer&amp; a, int) {
+&gt;   cout &lt;&lt; "Integer++\n";
+&gt;   Integer before(a.i);
+&gt;   a.i++;
+&gt;   return before;
+&gt; }
+&gt; // Prefix; return decremented value
+&gt; const Integer&amp; operator--(Integer&amp; a) {
+&gt;   cout &lt;&lt; "--Integer\n";
+&gt;   a.i--;
+&gt;   return a;
+&gt; }
+&gt; // Postfix; return the value before decrement:
+&gt; const Integer operator--(Integer&amp; a, int) {
+&gt;   cout &lt;&lt; "Integer--\n";
+&gt;   Integer before(a.i);
+&gt;   a.i--;
+&gt;   return before;
+&gt; }
+&gt; 
+&gt; // Show that the overloaded operators work:
+&gt; void f(Integer a) {
+&gt;   +a;
+&gt;   -a;
+&gt;   ~a;
+&gt;   Integer* ip = &amp;a;
+&gt;   !a;
+&gt;   ++a;
+&gt;   a++;
+&gt;   --a;
+&gt;   a--;
+&gt; }
+&gt; 
+&gt; // Member functions (implicit "this"):
+&gt; class Byte {
+&gt;   unsigned char b;
+&gt; public:
+&gt;   Byte(unsigned char bb = 0) : b(bb) {}
+&gt;   // No side effects: const member function:
+&gt;   const Byte&amp; operator+() const {
+&gt;     cout &lt;&lt; "+Byte\n";
+&gt;     return *this;
+&gt;   }
+&gt;   const Byte operator-() const {
+&gt;     cout &lt;&lt; "-Byte\n";
+&gt;     return Byte(-b);
+&gt;   }
+&gt;   const Byte operator~() const {
+&gt;     cout &lt;&lt; "~Byte\n";
+&gt;     return Byte(~b);
+&gt;   }
+&gt;   Byte operator!() const {
+&gt;     cout &lt;&lt; "!Byte\n";
+&gt;     return Byte(!b);
+&gt;   }
+&gt;   Byte* operator&amp;() {
+&gt;     cout &lt;&lt; "&amp;Byte\n";
+&gt;     return this;
+&gt;   }
+&gt;   // Side effects: non-const member function:
+&gt;   const Byte&amp; operator++() { // Prefix
+&gt;     cout &lt;&lt; "++Byte\n";
+&gt;     b++;
+&gt;     return *this;
+&gt;   }
+&gt;   const Byte operator++(int) { // Postfix
+&gt;     cout &lt;&lt; "Byte++\n";
+&gt;     Byte before(b);
+&gt;     b++;
+&gt;     return before;
+&gt;   }
+&gt;   const Byte&amp; operator--() { // Prefix
+&gt;     cout &lt;&lt; "--Byte\n";
+&gt;     --b;
+&gt;     return *this;
+&gt;   }
+&gt;   const Byte operator--(int) { // Postfix
+&gt;     cout &lt;&lt; "Byte--\n";
+&gt;     Byte before(b);
+&gt;     --b;
+&gt;     return before;
+&gt;   }
+&gt; };
+&gt; 
+&gt; void g(Byte b) {
+&gt;   +b;
+&gt;   -b;
+&gt;   ~b;
+&gt;   Byte* bp = &amp;b;
+&gt;   !b;
+&gt;   ++b;
+&gt;   b++;
+&gt;   --b;
+&gt;   b--;
+&gt; }
+&gt; 
+&gt; int main() {
+&gt;   Integer a;
+&gt;   f(a);
+&gt;   Byte b;
+&gt;   g(b);
+&gt; } ///:~
+</code></pre>
+<p>函数根据传递参数的方式分组。稍后将给出如何传递和返回参数的指南。上面的形式（以及下一节中的形式）通常都是你会用到的，因此在重载你自己的运算符时，可以将它们作为一种模式。</p>
+<h4 id="increment--decrement--递增和递减"><a class="header" href="#increment--decrement--递增和递减">Increment &amp; decrement  (递增和递减)</a></h4>
+<p>重载的 <strong>++</strong> 和 <strong>- -</strong> 操作符带来了一个两难的问题，因为你希望能够调用不同的函数，这取决于它们是出现在所作用对象的前缀（prefix）还是后缀（postfix）。解决方法很简单，但有时人们一开始会觉得有点困惑。例如，当编译器看到 <strong>++a</strong> （一个前增加）时，它会生成对<strong>operator++(a)</strong> 的调用；但当它看到 <strong>a++</strong> 时， 会生成对 <strong>operator++(a, int)</strong> 的调用。也就是说，编译器通过调用不同的重载函数来区分这两种形式。在<strong>OverloadingUnaryOperators.cpp</strong>的成员函数版本中，如果编译器看到 <strong>++b</strong>，就会生成对<strong>B::operator++( )</strong> 的调用；如果看到<strong>b++</strong>，就会调用<strong>B::operator++(int)</strong>。</p>
+<p>用户看到的只是前缀和后缀版本调用了不同的函数。然而，这两个函数调用具有不同的签名，因此它们链接到两个不同的函数体。编译器为 <strong>int</strong> 参数传递了一个虚拟常量值（由于该值从未使用过，因此从未赋予其标识符），从而为后缀版本生成了不同的签名。</p>
+<h3 id="binary-operators--位运算"><a class="header" href="#binary-operators--位运算">Binary operators  (位运算)</a></h3>
+<p>下面的列表重复了 <strong>OverloadingUnaryOperators.cpp</strong>中二进制运算符的示例，这样您就有了一个可以重载所有运算符的示例。同样，这里显示了全局版本和成员函数版本。</p>
+<pre><code class="language-cpp">&gt; //: C12:Integer.h
+&gt; // Non-member overloaded operators
+&gt; #ifndef INTEGER_H
+&gt; #define INTEGER_H
+&gt; #include &lt;iostream&gt;
+&gt; 
+&gt; // Non-member functions:
+&gt; class Integer { 
+&gt;   long i;
+&gt; public:
+&gt;   Integer(long ll = 0) : i(ll) {}
+&gt;   // Operators that create new, modified value:
+&gt;   friend const Integer
+&gt;     operator+(const Integer&amp; left,
+&gt;               const Integer&amp; right);
+&gt;   friend const Integer
+&gt;     operator-(const Integer&amp; left,
+&gt;               const Integer&amp; right);
+&gt;   friend const Integer
+&gt;     operator*(const Integer&amp; left,
+&gt;               const Integer&amp; right);
+&gt;   friend const Integer
+&gt;     operator/(const Integer&amp; left,
+&gt;               const Integer&amp; right);
+&gt;   friend const Integer
+&gt;     operator%(const Integer&amp; left,
+&gt;               const Integer&amp; right);
+&gt;   friend const Integer
+&gt;     operator^(const Integer&amp; left,
+&gt;               const Integer&amp; right);
+&gt;   friend const Integer
+&gt;     operator&amp;(const Integer&amp; left,
+&gt;               const Integer&amp; right);
+&gt;   friend const Integer
+&gt;     operator|(const Integer&amp; left,
+&gt;               const Integer&amp; right);
+&gt;   friend const Integer
+&gt;     operator&lt;&lt;(const Integer&amp; left,
+&gt;                const Integer&amp; right);
+&gt;   friend const Integer
+&gt;     operator&gt;&gt;(const Integer&amp; left,
+&gt;                const Integer&amp; right);
+&gt;   // Assignments modify &amp; return lvalue:
+&gt;   friend Integer&amp;
+&gt;     operator+=(Integer&amp; left,
+&gt;                const Integer&amp; right);
+&gt;   friend Integer&amp;
+&gt;     operator-=(Integer&amp; left,
+&gt;                const Integer&amp; right);
+&gt;   friend Integer&amp;
+&gt;     operator*=(Integer&amp; left,
+&gt;                const Integer&amp; right);
+&gt;   friend Integer&amp;
+&gt;     operator/=(Integer&amp; left,
+&gt;                const Integer&amp; right);
+&gt;   friend Integer&amp;
+&gt;     operator%=(Integer&amp; left,
+&gt;                const Integer&amp; right);
+&gt;   friend Integer&amp;
+&gt;     operator^=(Integer&amp; left,
+&gt;                const Integer&amp; right);
+&gt;   friend Integer&amp;
+&gt;     operator&amp;=(Integer&amp; left,
+&gt;                const Integer&amp; right);
+&gt;   friend Integer&amp;
+&gt;     operator|=(Integer&amp; left,
+&gt;                const Integer&amp; right);
+&gt;   friend Integer&amp;
+&gt;     operator&gt;&gt;=(Integer&amp; left,
+&gt;                 const Integer&amp; right);
+&gt;   friend Integer&amp;
+&gt;     operator&lt;&lt;=(Integer&amp; left,
+&gt;                 const Integer&amp; right);
+&gt;   // Conditional operators return true/false:
+&gt;   friend int
+&gt;     operator==(const Integer&amp; left,
+&gt;                const Integer&amp; right);
+&gt;   friend int
+&gt;     operator!=(const Integer&amp; left,
+&gt;                const Integer&amp; right);
+&gt;   friend int
+&gt;     operator&lt;(const Integer&amp; left,
+&gt;               const Integer&amp; right);
+&gt;   friend int
+&gt;     operator&gt;(const Integer&amp; left,
+&gt;               const Integer&amp; right);
+&gt;   friend int
+&gt;     operator&lt;=(const Integer&amp; left,
+&gt;                const Integer&amp; right);
+&gt;   friend int
+&gt;     operator&gt;=(const Integer&amp; left,
+&gt;                const Integer&amp; right);
+&gt;   friend int
+&gt;     operator&amp;&amp;(const Integer&amp; left,
+&gt;                const Integer&amp; right);
+&gt;   friend int
+&gt;     operator||(const Integer&amp; left,
+&gt;                const Integer&amp; right);
+&gt;   // Write the contents to an ostream:
+&gt;   void print(std::ostream&amp; os) const { os &lt;&lt; i; }
+&gt; }; 
+&gt; #endif // INTEGER_H ///:~
+
+&gt; //: C12:Integer.cpp {O}
+&gt; // Implementation of overloaded operators
+&gt; #include "Integer.h"
+&gt; #include "../require.h"
+&gt; 
+&gt; const Integer
+&gt;   operator+(const Integer&amp; left,
+&gt;             const Integer&amp; right) {
+&gt;   return Integer(left.i + right.i);
+&gt; }
+&gt; const Integer
+&gt;   operator-(const Integer&amp; left,
+&gt;             const Integer&amp; right) {
+&gt;   return Integer(left.i - right.i);
+&gt; }
+&gt; const Integer
+&gt;   operator*(const Integer&amp; left,
+&gt;             const Integer&amp; right) {
+&gt;   return Integer(left.i * right.i);
+&gt; }
+&gt; const Integer
+&gt;   operator/(const Integer&amp; left,
+&gt;             const Integer&amp; right) {
+&gt;   require(right.i != 0, "divide by zero");
+&gt;   return Integer(left.i / right.i);
+&gt; }
+&gt; const Integer
+&gt;   operator%(const Integer&amp; left,
+&gt;             const Integer&amp; right) {
+&gt;   require(right.i != 0, "modulo by zero");
+&gt;   return Integer(left.i % right.i);
+&gt; }
+&gt; const Integer
+&gt;   operator^(const Integer&amp; left,
+&gt;             const Integer&amp; right) {
+&gt;   return Integer(left.i ^ right.i);
+&gt; }
+&gt; const Integer
+&gt;   operator&amp;(const Integer&amp; left,
+&gt;             const Integer&amp; right) {
+&gt;   return Integer(left.i &amp; right.i);
+&gt; }
+&gt; const Integer
+&gt;   operator|(const Integer&amp; left,
+&gt;             const Integer&amp; right) {
+&gt;   return Integer(left.i | right.i);
+&gt; }
+&gt; const Integer
+&gt;   operator&lt;&lt;(const Integer&amp; left,
+&gt;              const Integer&amp; right) {
+&gt;   return Integer(left.i &lt;&lt; right.i);
+&gt; }
+&gt; const Integer
+&gt;   operator&gt;&gt;(const Integer&amp; left,
+&gt;              const Integer&amp; right) {
+&gt;   return Integer(left.i &gt;&gt; right.i);
+&gt; }
+&gt; // Assignments modify &amp; return lvalue:
+&gt; Integer&amp; operator+=(Integer&amp; left,
+&gt;                     const Integer&amp; right) {
+&gt;    if(&amp;left == &amp;right) {/* self-assignment */}
+&gt;    left.i += right.i;
+&gt;    return left;
+&gt; }
+&gt; Integer&amp; operator-=(Integer&amp; left,
+&gt;                     const Integer&amp; right) {
+&gt;    if(&amp;left == &amp;right) {/* self-assignment */}
+&gt;    left.i -= right.i;
+&gt;    return left;
+&gt; }
+&gt; Integer&amp; operator*=(Integer&amp; left,
+&gt;                     const Integer&amp; right) {
+&gt;    if(&amp;left == &amp;right) {/* self-assignment */}
+&gt;    left.i *= right.i;
+&gt;    return left;
+&gt; }
+&gt; Integer&amp; operator/=(Integer&amp; left,
+&gt;                     const Integer&amp; right) {
+&gt;    require(right.i != 0, "divide by zero");
+&gt;    if(&amp;left == &amp;right) {/* self-assignment */}
+&gt;    left.i /= right.i;
+&gt;    return left;
+&gt; }
+&gt; Integer&amp; operator%=(Integer&amp; left,
+&gt;                     const Integer&amp; right) {
+&gt;    require(right.i != 0, "modulo by zero");
+&gt;    if(&amp;left == &amp;right) {/* self-assignment */}
+&gt;    left.i %= right.i;
+&gt;    return left;
+&gt; }
+&gt; Integer&amp; operator^=(Integer&amp; left,
+&gt;                     const Integer&amp; right) {
+&gt;    if(&amp;left == &amp;right) {/* self-assignment */}
+&gt;    left.i ^= right.i;
+&gt;    return left;
+&gt; }
+&gt; Integer&amp; operator&amp;=(Integer&amp; left,
+&gt;                     const Integer&amp; right) {
+&gt;    if(&amp;left == &amp;right) {/* self-assignment */}
+&gt;    left.i &amp;= right.i;
+&gt;    return left;
+&gt; }
+&gt; Integer&amp; operator|=(Integer&amp; left,
+&gt;                     const Integer&amp; right) {
+&gt;    if(&amp;left == &amp;right) {/* self-assignment */}
+&gt;    left.i |= right.i;
+&gt;    return left;
+&gt; }
+&gt; Integer&amp; operator&gt;&gt;=(Integer&amp; left,
+&gt;                      const Integer&amp; right) {
+&gt;    if(&amp;left == &amp;right) {/* self-assignment */}
+&gt;    left.i &gt;&gt;= right.i;
+&gt;    return left;
+&gt; }
+&gt; Integer&amp; operator&lt;&lt;=(Integer&amp; left,
+&gt;                      const Integer&amp; right) {
+&gt;    if(&amp;left == &amp;right) {/* self-assignment */}
+&gt;    left.i &lt;&lt;= right.i;
+&gt;    return left;
+&gt; }
+&gt; // Conditional operators return true/false:
+&gt; int operator==(const Integer&amp; left,
+&gt;                const Integer&amp; right) {
+&gt;     return left.i == right.i;
+&gt; }
+&gt; int operator!=(const Integer&amp; left,
+&gt;                const Integer&amp; right) {
+&gt;     return left.i != right.i;
+&gt; }
+&gt; int operator&lt;(const Integer&amp; left,
+&gt;               const Integer&amp; right) {
+&gt;     return left.i &lt; right.i;
+&gt; }
+&gt; int operator&gt;(const Integer&amp; left,
+&gt;               const Integer&amp; right) {
+&gt;     return left.i &gt; right.i;
+&gt; }
+&gt; int operator&lt;=(const Integer&amp; left,
+&gt;                const Integer&amp; right) {
+&gt;     return left.i &lt;= right.i;
+&gt; }
+&gt; int operator&gt;=(const Integer&amp; left,
+&gt;                const Integer&amp; right) {
+&gt;     return left.i &gt;= right.i;
+&gt; }
+&gt; int operator&amp;&amp;(const Integer&amp; left,
+&gt;                const Integer&amp; right) {
+&gt;     return left.i &amp;&amp; right.i;
+&gt; }
+&gt; int operator||(const Integer&amp; left,
+&gt;                const Integer&amp; right) {
+&gt;     return left.i || right.i;
+&gt; } ///:~
+
+&gt; //: C12:IntegerTest.cpp
+&gt; //{L} Integer
+&gt; #include "Integer.h"
+&gt; #include &lt;fstream&gt;
+&gt; using namespace std;
+&gt; ofstream out("IntegerTest.out");
+&gt; 
+&gt; void h(Integer&amp; c1, Integer&amp; c2) {
+&gt;   // A complex expression:
+&gt;   c1 += c1 * c2 + c2 % c1;
+&gt;   #define TRY(OP) \
+&gt;     out &lt;&lt; "c1 = "; c1.print(out); \
+&gt;     out &lt;&lt; ", c2 = "; c2.print(out); \
+&gt;     out &lt;&lt; ";  c1 " #OP " c2 produces "; \
+&gt;     (c1 OP c2).print(out); \
+&gt;     out &lt;&lt; endl;
+&gt;   TRY(+) TRY(-) TRY(*) TRY(/)
+&gt;   TRY(%) TRY(^) TRY(&amp;) TRY(|)
+&gt;   TRY(&lt;&lt;) TRY(&gt;&gt;) TRY(+=) TRY(-=)
+&gt;   TRY(*=) TRY(/=) TRY(%=) TRY(^=)
+&gt;   TRY(&amp;=) TRY(|=) TRY(&gt;&gt;=) TRY(&lt;&lt;=)
+&gt;   // Conditionals:
+&gt;   #define TRYC(OP) \
+&gt;     out &lt;&lt; "c1 = "; c1.print(out); \
+&gt;     out &lt;&lt; ", c2 = "; c2.print(out); \
+&gt;     out &lt;&lt; ";  c1 " #OP " c2 produces "; \
+&gt;     out &lt;&lt; (c1 OP c2); \
+&gt;     out &lt;&lt; endl;
+&gt;   TRYC(&lt;) TRYC(&gt;) TRYC(==) TRYC(!=) TRYC(&lt;=)
+&gt;   TRYC(&gt;=) TRYC(&amp;&amp;) TRYC(||)
+&gt; } 
+&gt; 
+&gt; int main() {
+&gt;   cout &lt;&lt; "friend functions" &lt;&lt; endl;
+&gt;   Integer c1(47), c2(9);
+&gt;   h(c1, c2);
+&gt; } ///:~
+
+&gt; //: C12:Byte.h
+&gt; // Member overloaded operators
+&gt; #ifndef BYTE_H
+&gt; #define BYTE_H
+&gt; #include "../require.h"
+&gt; #include &lt;iostream&gt;
+&gt; // Member functions (implicit "this"):
+&gt; class Byte { 
+&gt;   unsigned char b;
+&gt; public:
+&gt;   Byte(unsigned char bb = 0) : b(bb) {}
+&gt;   // No side effects: const member function:
+&gt;   const Byte
+&gt;     operator+(const Byte&amp; right) const {
+&gt;     return Byte(b + right.b);
+&gt;   }
+&gt;   const Byte
+&gt;     operator-(const Byte&amp; right) const {
+&gt;     return Byte(b - right.b);
+&gt;   }
+&gt;   const Byte
+&gt;     operator*(const Byte&amp; right) const {
+&gt;     return Byte(b * right.b);
+&gt;   }
+&gt;   const Byte
+&gt;     operator/(const Byte&amp; right) const {
+&gt;     require(right.b != 0, "divide by zero");
+&gt;     return Byte(b / right.b);
+&gt;   }
+&gt;   const Byte
+&gt;     operator%(const Byte&amp; right) const {
+&gt;     require(right.b != 0, "modulo by zero");
+&gt;     return Byte(b % right.b);
+&gt;   }
+&gt;   const Byte
+&gt;     operator^(const Byte&amp; right) const {
+&gt;     return Byte(b ^ right.b);
+&gt;   }
+&gt;   const Byte
+&gt;     operator&amp;(const Byte&amp; right) const {
+&gt;     return Byte(b &amp; right.b);
+&gt;   }
+&gt;   const Byte
+&gt;     operator|(const Byte&amp; right) const {
+&gt;     return Byte(b | right.b);
+&gt;   }
+&gt;   const Byte
+&gt;     operator&lt;&lt;(const Byte&amp; right) const {
+&gt;     return Byte(b &lt;&lt; right.b);
+&gt;   }
+&gt;   const Byte
+&gt;     operator&gt;&gt;(const Byte&amp; right) const {
+&gt;     return Byte(b &gt;&gt; right.b);
+&gt;   }
+&gt;   // Assignments modify &amp; return lvalue.
+&gt;   // operator= can only be a member function:
+&gt;   Byte&amp; operator=(const Byte&amp; right) {
+&gt;     // Handle self-assignment:
+&gt;     if(this == &amp;right) return *this;
+&gt;     b = right.b;
+&gt;     return *this;
+&gt;   }
+&gt;   Byte&amp; operator+=(const Byte&amp; right) {
+&gt;     if(this == &amp;right) {/* self-assignment */}
+&gt;     b += right.b;
+&gt;     return *this;
+&gt;   }
+&gt;   Byte&amp; operator-=(const Byte&amp; right) {
+&gt;     if(this == &amp;right) {/* self-assignment */}
+&gt;     b -= right.b;
+&gt;     return *this;
+&gt;   }
+&gt;   Byte&amp; operator*=(const Byte&amp; right) {
+&gt;     if(this == &amp;right) {/* self-assignment */}
+&gt;     b *= right.b;
+&gt;     return *this;
+&gt;   }
+&gt;   Byte&amp; operator/=(const Byte&amp; right) {
+&gt;     require(right.b != 0, "divide by zero");
+&gt;     if(this == &amp;right) {/* self-assignment */}
+&gt;     b /= right.b;
+&gt;     return *this;
+&gt;   }
+&gt;   Byte&amp; operator%=(const Byte&amp; right) {
+&gt;     require(right.b != 0, "modulo by zero");
+&gt;     if(this == &amp;right) {/* self-assignment */}
+&gt;     b %= right.b;
+&gt;     return *this;
+&gt;   }
+&gt;   Byte&amp; operator^=(const Byte&amp; right) {
+&gt;     if(this == &amp;right) {/* self-assignment */}
+&gt;     b ^= right.b;
+&gt;     return *this;
+&gt;   }
+&gt;   Byte&amp; operator&amp;=(const Byte&amp; right) {
+&gt;     if(this == &amp;right) {/* self-assignment */}
+&gt;     b &amp;= right.b;
+&gt;     return *this;
+&gt;   }
+&gt;   Byte&amp; operator|=(const Byte&amp; right) {
+&gt;     if(this == &amp;right) {/* self-assignment */}
+&gt;     b |= right.b;
+&gt;     return *this;
+&gt;   }
+&gt;   Byte&amp; operator&gt;&gt;=(const Byte&amp; right) {
+&gt;     if(this == &amp;right) {/* self-assignment */}
+&gt;     b &gt;&gt;= right.b;
+&gt;     return *this;
+&gt;   }
+&gt;   Byte&amp; operator&lt;&lt;=(const Byte&amp; right) {
+&gt;     if(this == &amp;right) {/* self-assignment */}
+&gt;     b &lt;&lt;= right.b;
+&gt;     return *this;
+&gt;   }
+&gt;   // Conditional operators return true/false:
+&gt;   int operator==(const Byte&amp; right) const {
+&gt;       return b == right.b;
+&gt;   }
+&gt;   int operator!=(const Byte&amp; right) const {
+&gt;       return b != right.b;
+&gt;   }
+&gt;   int operator&lt;(const Byte&amp; right) const {
+&gt;       return b &lt; right.b;
+&gt;   }
+&gt;   int operator&gt;(const Byte&amp; right) const {
+&gt;       return b &gt; right.b;
+&gt;   }
+&gt;   int operator&lt;=(const Byte&amp; right) const {
+&gt;       return b &lt;= right.b;
+&gt;   }
+&gt;   int operator&gt;=(const Byte&amp; right) const {
+&gt;       return b &gt;= right.b;
+&gt;   }
+&gt;   int operator&amp;&amp;(const Byte&amp; right) const {
+&gt;       return b &amp;&amp; right.b;
+&gt;   }
+&gt;   int operator||(const Byte&amp; right) const {
+&gt;       return b || right.b;
+&gt;   }
+&gt;   // Write the contents to an ostream:
+&gt;   void print(std::ostream&amp; os) const {
+&gt;     os &lt;&lt; "0x" &lt;&lt; std::hex &lt;&lt; int(b) &lt;&lt; std::dec;
+&gt;   }
+&gt; }; 
+&gt; #endif // BYTE_H ///:~
+
+&gt; //: C12:ByteTest.cpp
+&gt; #include "Byte.h"
+&gt; #include &lt;fstream&gt;
+&gt; using namespace std;
+&gt; ofstream out("ByteTest.out");
+&gt; 
+&gt; void k(Byte&amp; b1, Byte&amp; b2) {
+&gt;   b1 = b1 * b2 + b2 % b1;
+&gt; 
+&gt;   #define TRY2(OP) \
+&gt;     out &lt;&lt; "b1 = "; b1.print(out); \
+&gt;     out &lt;&lt; ", b2 = "; b2.print(out); \
+&gt;     out &lt;&lt; ";  b1 " #OP " b2 produces "; \
+&gt;     (b1 OP b2).print(out); \
+&gt;     out &lt;&lt; endl;
+&gt; 
+&gt;   b1 = 9; b2 = 47;
+&gt;   TRY2(+) TRY2(-) TRY2(*) TRY2(/)
+&gt;   TRY2(%) TRY2(^) TRY2(&amp;) TRY2(|)
+&gt;   TRY2(&lt;&lt;) TRY2(&gt;&gt;) TRY2(+=) TRY2(-=)
+&gt;   TRY2(*=) TRY2(/=) TRY2(%=) TRY2(^=)
+&gt;   TRY2(&amp;=) TRY2(|=) TRY2(&gt;&gt;=) TRY2(&lt;&lt;=)
+&gt;   TRY2(=) // Assignment operator
+&gt; 
+&gt;   // Conditionals:
+&gt;   #define TRYC2(OP) \
+&gt;     out &lt;&lt; "b1 = "; b1.print(out); \
+&gt;     out &lt;&lt; ", b2 = "; b2.print(out); \
+&gt;     out &lt;&lt; ";  b1 " #OP " b2 produces "; \
+&gt;     out &lt;&lt; (b1 OP b2); \
+&gt;     out &lt;&lt; endl;
+&gt; 
+&gt;   b1 = 9; b2 = 47;
+&gt;   TRYC2(&lt;) TRYC2(&gt;) TRYC2(==) TRYC2(!=) TRYC2(&lt;=)
+&gt;   TRYC2(&gt;=) TRYC2(&amp;&amp;) TRYC2(||)
+&gt; 
+&gt;   // Chained assignment:
+&gt;   Byte b3 = 92;
+&gt;   b1 = b2 = b3;
+&gt; }
+&gt; 
+&gt; int main() {
+&gt;   out &lt;&lt; "member functions:" &lt;&lt; endl;
+&gt;   Byte b1(47), b2(9);
+&gt;   k(b1, b2);
+&gt; } ///:~
+</code></pre>
+<p>可以看出，<strong>operator=</strong> 只允许是成员函数。稍后将对此进行解释。</p>
+<p>请注意，所有赋值运算符都有检查自赋值的代码；这是一个通用准则。在某些情况下，这并非必要；例如，在使用 <strong>operator+=</strong> 时，您往往希望说 <strong>A+=A</strong> 并让它将 <strong>A</strong> 添加到自身。检查自分配的最重要的地方是 <strong>操作符=</strong>，因为对于复杂的对象，可能会出现灾难性的结果。(在某些情况下没有问题，但在编写 <strong>operator=</strong> 时应始终牢记这一点）。</p>
+<p>前面两个示例中显示的所有运算符都被重载以处理单一类型。也可以重载运算符来处理混合类型，例如可以将苹果加到桔子上。不过，在开始详尽地重载运算符之前，应该先看看本章后面关于自动类型转换的章节。通常，在正确的地方进行类型转换可以节省大量的重载操作符。</p>
+<h3 id="arguments--return-values--参数和返回值"><a class="header" href="#arguments--return-values--参数和返回值">Arguments &amp; return values  (参数和返回值)</a></h3>
+<p>当您查看 <strong>OverloadingUnaryOperators.cpp</strong>、<strong>Integer.h</strong> 和 <strong>Byte.h</strong>，并看到所有不同的参数传递和返回方式时，起初可能会感到有些困惑。它们遵循的是一种逻辑模式，也是你在大多数选择中都要使用的模式。</p>
+<ol>
+<li>与任何函数参数一样，如果您只需要读取参数而不需要更改参数，则默认将其作为 <strong>const</strong> 引用传递。普通算术运算（如 <strong>+</strong> 和 <strong>-</strong> 等）和布尔运算不会更改参数，因此主要使用<strong>const</strong>引用传递。当函数是一个类成员时，这就意味着它是一个 <strong>const</strong> 成员函数。只有在运算符赋值（如 <strong>+=</strong>）和 <strong>运算符=</strong>（改变左侧参数）的情况下，左侧参数才不是常量，但它仍作为地址传入，因为它将被改变。</li>
+<li>返回值的类型取决于操作符的预期含义。(如果操作符的作用是产生一个新值，则需要生成一个新对象作为返回值。例如，<strong>Integer::operator+</strong> 必须生成一个与操作数相加的 <strong>Integer</strong> 对象。该对象的返回值为<strong>const</strong>，因此结果不能作为 l 值修改。</li>
+<li>所有赋值操作符都会修改 lvalue。为了使赋值结果能在链式表达式（如 <strong>a=b=c</strong>）中使用，我们希望返回一个指向刚刚修改过的 l 值的引用。但这个引用应该是<strong>常数</strong>还是非<strong>常数</strong>呢？虽然您是从左向右读取 <strong>a=b=c</strong>，但编译器是从右向左进行解析的，因此您并不被迫返回一个非<em><strong>const</strong>以支持赋值链。不过，有时人们确实希望能对刚刚赋值的对象执行操作，例如 <strong>(a=b).func( );</strong> 在对 <strong>a</strong> 赋值后，对 <strong>a</strong> 调用 <strong>func( )</strong>。因此，所有赋值操作符的返回值都应该是对 lvalue 的非</em><em>恒定</em>*引用。</li>
+<li>对于逻辑运算符，每个人都希望最差能得到<strong>int</strong>，最好能得到<strong>bool</strong>。(在大多数编译器支持 C++ 内置<strong>bool</strong>之前开发的库将使用<strong>int</strong>或等效的<strong>typedef</strong>）。</li>
+</ol>
+<p>递增和递减运算符因为有前缀和后缀版本，所以会带来一个难题。这两个版本都会更改对象，因此不能将对象视为<strong>常数</strong>。前缀版本会返回对象更改后的值，因此我们希望返回更改后的对象。因此，使用前缀时，只需将 <em><strong>this</strong> 作为引用返回即可。后缀版本应该在值被更改之前返回该值，所以你不得不创建一个单独的对象来表示该值并返回它。因此，使用后缀时，如果要保留预期的含义，就必须按值返回。(注意，有时你会发现增量和减量运算符会返回一个</em><em>int</em><em>或</em><em>bool</em><em>来表示，例如，一个用于在列表中移动的对象是否处于列表的末尾）。现在的问题是：这些运算符应该返回</em><em>const</em><em>还是非</em><em>const</em>*？ 如果允许修改对象，并且有人写了 <strong>(++a).func( )</strong>，那么<strong>func( )</strong> 将对<strong>a</strong>本身执行操作，但如果写了 <strong>(a++).func( )</strong>，<strong>func( )</strong> 将对后缀<strong>operator++</strong> 返回的临时对象执行操作。临时对象是自动<strong>const</strong>的，因此编译器会对此进行标记，但为了保持一致，将它们都<strong>const</strong>可能更有意义，就像这里所做的那样。或者，你也可以选择将前缀版本设为非<em><strong>const</strong>，而将后缀设为</em><strong>const</strong>。由于您可能希望赋予递增和递减运算符多种含义，因此需要根据具体情况加以考虑。</p>
+<h4 id="return-by-value-as-const--以常量形式按值返回"><a class="header" href="#return-by-value-as-const--以常量形式按值返回">Return by value as const  (以常量形式按值返回)</a></h4>
+<p>以<strong>常数</strong>的形式按值返回，初看起来有点微妙，因此值得多解释一下。请看二进制<strong>操作符+</strong>。如果在 <strong>f(a+b)</strong> 这样的表达式中使用它, <strong>a+b</strong> 的结果就会成为一个临时对象，用于调用<strong>f( )</strong>。由于它是一个临时对象，因此自动<strong>为常数</strong>，所以无论您是否明确地将返回值设为<strong>为常数</strong>都没有影响。</p>
+<p>不过，您也可以向 <strong>a+b</strong> 的返回值发送信息，而不只是将其传递给一个函数。例如，你可以说 <strong>(a+b).g( )</strong>，其中 <strong>g( )</strong> 是 <strong>Integer</strong> 的某个成员函数。将返回值设为 <strong>const</strong>，就表示只能调用 <strong>const</strong>成员函数来获取该返回值。这样做是<strong>const</strong>正确的，因为它避免了在对象中存储很可能丢失的有价值信息。</p>
+<h4 id="the-return-optimization--返回值优化"><a class="header" href="#the-return-optimization--返回值优化">The return optimization  (返回值优化)</a></h4>
+<p>在创建按值返回的新对象时，请注意所使用的形式。例如，在 <strong>operator+</strong> 中：</p>
+<pre><code class="language-cpp">&gt; return Integer(left.i + right.i);
+</code></pre>
+<p>乍一看，这可能是一个 "构造函数的函数调用"，其实不然。语法是临时对象的语法；语句是 "创建一个临时的 <strong>Integer</strong> 对象并返回它"。因此，你可能会认为其结果与创建一个命名的本地对象并返回该对象是一样的。然而，这完全不同。如果换成如下语句</p>
+<pre><code class="language-cpp">&gt; Integer tmp(left.i + right.i);
+&gt; return tmp;
+</code></pre>
+<p>会发生三件事。首先，创建 <strong>tmp</strong> 对象，包括调用其构造函数。第二，复制构造函数将 <strong>tmp</strong> 复制到外部返回值的位置。第三，在作用域结束时调用 <strong>tmp</strong> 的析构函数。</p>
+<p>相比之下，"返回临时 "方法的工作原理则完全不同。当编译器看到你这样做时，它知道你除了返回对象外，对它所创建的对象没有其他需要。编译器会利用这一点，直接将对象构建到外部返回值的位置。这只需要调用一次普通的构造函数（不需要复制构造函数），也不需要调用析构函数，因为你实际上从未创建过本地对象。因此，虽然除了程序员的意识外，它不需要任何代价，但效率却大大提高了。这通常被称为_返回值优化_。</p>
+<h3 id="unusual-operators--不寻常的操作符"><a class="header" href="#unusual-operators--不寻常的操作符">Unusual operators  (不寻常的操作符)</a></h3>
+<p>还有几个操作符的重载语法略有不同。</p>
+<p>下标 <strong>operator[ ]</strong> 必须是成员函数，并且需要一个参数。由于 <strong>operator[ ]</strong> 意味着它所调用的对象就像一个数组，所以你经常会从这个操作符返回一个引用，这样它就可以方便地用在等号的左边。这个运算符通常会被重载；你将在本书的其余部分看到示例。</p>
+<p>操作符 <strong>new</strong> 和 <strong>delete</strong> 控制动态存储器分配，可以多种不同方式重载。本主题将在第 13 章中介绍。</p>
+<h4 id="operator-comma-操作符逗号"><a class="header" href="#operator-comma-操作符逗号">Operator comma (操作符逗号)</a></h4>
+<p>当逗号操作符出现在逗号定义类型的对象旁边时，就会被调用。但是，"<strong>操作符,</strong>"不会在函数参数列表中调用，只会在用逗号分隔的对象中调用。这个运算符似乎并没有太多实际用途；它出现在语言中是为了保持一致性。下面的示例展示了逗号出现在对象之前和之后时，如何调用逗号函数：</p>
+<pre><code class="language-cpp">&gt; //: C12:OverloadingOperatorComma.cpp
+&gt; #include &lt;iostream&gt;
+&gt; using namespace std;
+&gt; 
+&gt; class After {
+&gt; public:
+&gt;   const After&amp; operator,(const After&amp;) const {
+&gt;     cout &lt;&lt; "After::operator,()" &lt;&lt; endl;
+&gt;     return *this;
+&gt;   }
+&gt; };
+&gt; 
+&gt; class Before {};
+&gt; 
+&gt; Before&amp; operator,(int, Before&amp; b) {
+&gt;   cout &lt;&lt; "Before::operator,()" &lt;&lt; endl;
+&gt;   return b;
+&gt; }
+&gt; 
+&gt; int main() {
+&gt;   After a, b;
+&gt;   a, b;  // Operator comma called
+&gt; 
+&gt;   Before c;
+&gt;   1, c;  // Operator comma called
+&gt; } ///:~
+</code></pre>
+<p>全局函数允许将逗号放在相关对象之前。所示用法相当隐晦，值得商榷。虽然您可能会在更复杂的表达式中使用逗号分隔列表，但在大多数情况下，这种用法都过于隐晦。</p>
+<h4 id="operator---操作符---"><a class="header" href="#operator---操作符---">Operator-&gt;  (操作符-&gt;  )</a></h4>
+<p>**操作符-&gt;**通常用于将一个对象显示为指针。由于这种对象比一般指针具有更多的 "智能"，因此通常被称为_智能指针_。如果你想将一个类 "包裹 "在指针周围，以确保指针的安全，或者在_iterator_（一种在其他对象的_collection_ /<em>container</em>（集合/容器）中移动并一次选择一个的对象，而不直接访问容器的实现）的常用用法中，这种指针尤其有用。(你经常会在类库中发现容器和迭代器，如本书第 2 卷中介绍的标准 C++ 库）。</p>
+<p>指针解除引用操作符必须是成员函数。指针反引用操作符还有一些非典型的限制条件：它必须返回一个也有指针反引用操作符的对象（或对象引用），或者必须返回一个指针，用来选择指针反引用操作符箭头指向的对象。下面是一个简单的例子：</p>
+<pre><code class="language-cpp">&gt; //: C12:SmartPointer.cpp
+&gt; #include &lt;iostream&gt;
+&gt; #include &lt;vector&gt;
+&gt; #include "../require.h"
+&gt; using namespace std;
+&gt; 
+&gt; class Obj {
+&gt;   static int i, j;
+&gt; public:
+&gt;   void f() const { cout &lt;&lt; i++ &lt;&lt; endl; }
+&gt;   void g() const { cout &lt;&lt; j++ &lt;&lt; endl; }
+&gt; };
+&gt; 
+&gt; // Static member definitions:
+&gt; int Obj::i = 47;
+&gt; int Obj::j = 11;
+&gt; 
+&gt; // Container:
+&gt; class ObjContainer {
+&gt;   vector&lt;Obj*&gt; a;
+&gt; public:
+&gt;   void add(Obj* obj) { a.push_back(obj); }
+&gt;   friend class SmartPointer;
+&gt; };
+&gt; 
+&gt; class SmartPointer {
+&gt;   ObjContainer&amp; oc;
+&gt;   int index;
+&gt; public:
+&gt;   SmartPointer(ObjContainer&amp; objc) : oc(objc) {
+&gt;     index = 0;
+&gt;   }
+&gt;   // Return value indicates end of list:
+&gt;   bool operator++() { // Prefix
+&gt;     if(index &gt;= oc.a.size()) return false;
+&gt;     if(oc.a[++index] == 0) return false;
+&gt;     return true;
+&gt;   }
+&gt;   bool operator++(int) { // Postfix
+&gt;     return operator++(); // Use prefix version
+&gt;   }
+&gt;   Obj* operator-&gt;() const {
+&gt;     require(oc.a[index] != 0, "Zero value "
+&gt;       "returned by SmartPointer::operator-&gt;()");
+&gt;     return oc.a[index];
+&gt;   }
+&gt; };
+&gt; 
+&gt; int main() {
+&gt;   const int sz = 10;
+&gt;   Obj o[sz];
+&gt;   ObjContainer oc;
+&gt;   for(int i = 0; i &lt; sz; i++)
+&gt;     oc.add(&amp;o[i]); // Fill it up
+&gt;   SmartPointer sp(oc); // Create an iterator
+&gt;   do {
+&gt;     sp-&gt;f(); // Pointer dereference operator call
+&gt;     sp-&gt;g();
+&gt;   } while(sp++);
+&gt; } ///:~
+</code></pre>
+<p>类 <strong>Obj</strong> 定义了本程序中的操作对象。函数 <strong>f( )</strong> 和 <strong>g( )</strong> 只是使用 <strong>static</strong> 数据成员打印出有趣的值。这些对象的指针通过 <strong>add( )</strong> 函数存储在<strong>ObjContainer</strong>类型的容器中。<strong>ObjContainer</strong>看起来就像一个指针数组，但你会发现没有办法将指针再取出来。不过，<strong>SmartPointer</strong> 被声明为一个<strong>友</strong>类，因此它有权查看容器内部。<strong>SmartPointer</strong>类看起来非常像一个智能指针--你可以使用<strong>operator++</strong>（你也可以定义一个<strong>operator- -</strong>）向前移动它，它不会超过它所指向的容器的末端，并且（通过指针解除引用操作符）产生它所指向的值。请注意，<strong>SmartPointer</strong> 是为其创建的容器定制的；与普通指针不同，没有 "通用 "的智能指针。你将在本书最后一章和第 2 卷（可从 <em>www.BruceEckel.com</em> 下载）中了解到更多关于被称为 "迭代器 "的智能指针的知识。</p>
+<p>在<strong>main()</strong> 中，一旦容器<strong>oc</strong>被<strong>Obj</strong>对象填满，就会创建一个<strong>SmartPointer sp</strong>。智能指针调用发生在表达式中：</p>
+<pre><code class="language-cpp">&gt; sp-&gt;f(); // Smart pointer calls
+&gt; sp-&gt;g(); 
+</code></pre>
+<p>在这里，尽管<strong>sp</strong>实际上没有<strong>f( )</strong> 和<strong>g( )</strong> 成员函数，但指针解除引用操作符会自动为<strong>SmartPointer::operator-&gt;<strong>返回的</strong>Obj</strong>*调用这些函数。编译器会执行所有检查以确保函数调用正常工作。</p>
+<p>虽然指针取消引用操作符的基本机制比其他操作符更复杂，但其目标是完全相同的：为类的用户提供更方便的语法。</p>
+<h4 id="a-nested-iterator--嵌套迭代器"><a class="header" href="#a-nested-iterator--嵌套迭代器">A nested iterator  (嵌套迭代器)</a></h4>
+<p>更常见的情况是，"智能指针 "或 "迭代器 "类嵌套在它所服务的类中。前面的示例可以重写，将 <strong>SmartPointer</strong> 嵌套在 <strong>ObjContainer</strong> 内，就像这样：</p>
+<pre><code class="language-cpp">&gt; //: C12:NestedSmartPointer.cpp
+&gt; #include &lt;iostream&gt;
+&gt; #include &lt;vector&gt;
+&gt; #include "../require.h"
+&gt; using namespace std;
+&gt; 
+&gt; class Obj {
+&gt;   static int i, j;
+&gt; public:
+&gt;   void f() { cout &lt;&lt; i++ &lt;&lt; endl; }
+&gt;   void g() { cout &lt;&lt; j++ &lt;&lt; endl; }
+&gt; };
+&gt; 
+&gt; // Static member definitions:
+&gt; int Obj::i = 47;
+&gt; int Obj::j = 11;
+&gt; 
+&gt; // Container:
+&gt; class ObjContainer {
+&gt;   vector&lt;Obj*&gt; a;
+&gt; public:
+&gt;   void add(Obj* obj) { a.push_back(obj); }
+&gt;   class SmartPointer;
+&gt;   friend class SmartPointer;
+&gt;   class SmartPointer {
+&gt;     ObjContainer&amp; oc;
+&gt;     unsigned int index;
+&gt;   public:
+&gt;     SmartPointer(ObjContainer&amp; objc) : oc(objc) {
+&gt;       index = 0;
+&gt;     }
+&gt;     // Return value indicates end of list:
+&gt;     bool operator++() { // Prefix
+&gt;       if(index &gt;= oc.a.size()) return false;
+&gt;       if(oc.a[++index] == 0) return false;
+&gt;       return true;
+&gt;     }
+&gt;     bool operator++(int) { // Postfix
+&gt;       return operator++(); // Use prefix version
+&gt;     }
+&gt;     Obj* operator-&gt;() const {
+&gt;       require(oc.a[index] != 0, "Zero value "
+&gt;         "returned by SmartPointer::operator-&gt;()");
+&gt;       return oc.a[index];
+&gt;     }
+&gt;   };
+&gt;   // Function to produce a smart pointer that 
+&gt;   // points to the beginning of the ObjContainer:
+&gt;   SmartPointer begin() { 
+&gt;     return SmartPointer(*this);
+&gt;   }
+&gt; };
+&gt; 
+&gt; int main() {
+&gt;   const int sz = 10;
+&gt;   Obj o[sz];
+&gt;   ObjContainer oc;
+&gt;   for(int i = 0; i &lt; sz; i++)
+&gt;     oc.add(&amp;o[i]); // Fill it up
+&gt;   ObjContainer::SmartPointer sp = oc.begin();
+&gt;   do {
+&gt;     sp-&gt;f(); // Pointer dereference operator call
+&gt;     sp-&gt;g();
+&gt;   } while(++sp);
+&gt; } ///:~
+</code></pre>
+<p>除了类的实际嵌套外，这里只有两处不同。首先是在类的声明上，它可以是一个<strong>好友</strong>：</p>
+<pre><code class="language-cpp">&gt; class SmartPointer;
+&gt; friend SmartPointer;
+</code></pre>
+<p>编译器必须首先知道类的存在，然后才能告诉编译器它是一个 <strong>friend</strong> 类。</p>
+<p>第二个不同之处在于<strong>ObjContainer</strong>成员函数<strong>begin( )</strong>，它会产生一个<strong>SmartPointer</strong>，指向<strong>ObjContainer</strong>序列的起始位置。虽然这只是一个方便的函数，但它的价值在于它遵循了标准 C++ 库中使用的部分形式。</p>
+<h4 id="operator---操作符--"><a class="header" href="#operator---操作符--">Operator-&gt;*  (操作符-&gt;* *)</a></h4>
+<p><strong>operator-&gt;</strong>* 是一个二进制操作符，其行为与所有其他二进制操作符相同。它适用于需要模仿前一章介绍的内置_pointer-to-member_语法行为的情况。</p>
+<p>与 <strong>operator-&gt;</strong>* 一样，指针到成员的取消引用操作符通常与某种代表 "智能指针 "的对象一起使用，不过这里的示例会简单一些，以便理解。定义 <strong>operator-&gt;</strong>* 时的诀窍是，它必须返回一个对象，在调用 <strong>operator( )</strong> 时，可以调用该对象的参数来调用所调用的成员函数。</p>
+<p>函数调用_ <strong>operator( )</strong> 必须是成员函数，它的独特之处在于允许任意数量的参数。它使你的对象看起来就像一个函数。虽然你可以定义多个具有不同参数的重载 <strong>operator( )</strong> 函数，但它通常用于只有一个操作的类型，或者至少是一个特别突出的操作。你将在第 2 卷中看到，标准 C++ 库使用函数调用操作符来创建 "函数对象"。</p>
+<p>要创建<strong>operator-&gt;****，首先必须创建一个带有</strong>operator( )<strong>的类，该类就是</strong>operator-&gt;****将返回的对象类型。该类必须以某种方式捕获必要的信息，以便在调用 <strong>operator( )</strong> 时（这会自动发生），为对象取消引用成员指针。在下面的示例中，<strong>FunctionObject</strong> 构造函数捕获并存储了对象指针和成员函数指针，然后<strong>operator( )</strong> 使用这些指针进行实际的指针到成员调用：</p>
+<pre><code class="language-cpp">&gt; //: C12:PointerToMemberOperator.cpp
+&gt; #include &lt;iostream&gt;
+&gt; using namespace std;
+&gt; 
+&gt; class Dog {
+&gt; public:
+&gt;   int run(int i) const { 
+&gt;     cout &lt;&lt; "run\n";  
+&gt;     return i; 
+&gt;   }
+&gt;   int eat(int i) const { 
+&gt;      cout &lt;&lt; "eat\n";  
+&gt;      return i; 
+&gt;   }
+&gt;   int sleep(int i) const { 
+&gt;     cout &lt;&lt; "ZZZ\n"; 
+&gt;     return i; 
+&gt;   }
+&gt;   typedef int (Dog::*PMF)(int) const;
+&gt;   // operator-&gt;* must return an object 
+&gt;   // that has an operator():
+&gt;   class FunctionObject {
+&gt;     Dog* ptr;
+&gt;     PMF pmem;
+&gt;   public:
+&gt;     // Save the object pointer and member pointer
+&gt;     FunctionObject(Dog* wp, PMF pmf) 
+&gt;       : ptr(wp), pmem(pmf) { 
+&gt;       cout &lt;&lt; "FunctionObject constructor\n";
+&gt;     }
+&gt;     // Make the call using the object pointer
+&gt;     // and member pointer
+&gt;     int operator()(int i) const {
+&gt;       cout &lt;&lt; "FunctionObject::operator()\n";
+&gt;       return (ptr-&gt;*pmem)(i); // Make the call
+&gt;     }
+&gt;   };
+&gt;   FunctionObject operator-&gt;*(PMF pmf) { 
+&gt;     cout &lt;&lt; "operator-&gt;*" &lt;&lt; endl;
+&gt;     return FunctionObject(this, pmf);
+&gt;   }
+&gt; };
+&gt;  
+&gt; int main() {
+&gt;   Dog w;
+&gt;   Dog::PMF pmf = &amp;Dog::run;
+&gt;   cout &lt;&lt; (w-&gt;*pmf)(1) &lt;&lt; endl;
+&gt;   pmf = &amp;Dog::sleep;
+&gt;   cout &lt;&lt; (w-&gt;*pmf)(2) &lt;&lt; endl;
+&gt;   pmf = &amp;Dog::eat;
+&gt;   cout &lt;&lt; (w-&gt;*pmf)(3) &lt;&lt; endl;
+&gt; } ///:~
+</code></pre>
+<p><strong>Dog</strong> 有三个成员函数，它们都接受一个<strong>int</strong>参数并返回一个<strong>int</strong>。<strong>PMF</strong>是一个<strong>类型定义</strong>，用于简化指向<strong>Dog</strong>成员函数的成员指针的定义。</p>
+<p><strong>FunctionObject</strong> 由 <strong>operator-&gt;</strong>* 创建并返回。请注意，<strong>operator-&gt;</strong>** 知道指针转成员调用的对象（<strong>this</strong>）和指针转成员，并将它们传递给存储值的 <strong>FunctionObject</strong> 构造函数。当 <strong>operator-&gt;</strong>* 被调用时，编译器会立即调用 <strong>operator( )</strong> 来获取 <strong>operator-&gt;</strong>* 的返回值，同时传递给 <strong>operator-&gt;</strong>* 的参数。**FunctionObject::operator()**接收参数，然后使用其存储的对象指针和成员指针取消引用 "真正的 "成员指针。</p>
+<p>请注意，与 <strong>operator-&gt;</strong> 一样，您在这里所做的是将自己插入到 <strong>operator-&gt;</strong>* 的调用中间。这样，您就可以在需要时执行一些额外的操作。</p>
+<p>这里实现的<strong>operator-&gt;****机制只适用于接受一个</strong>int<strong>参数并返回一个</strong>int<strong>的成员函数。这是有局限性的，但如果要为每种不同的可能性创建重载机制，似乎是一项令人望而却步的任务。幸运的是，C++的</strong>模板**机制（在本书最后一章和第2卷中有描述）就是为了处理这样的问题而设计的。</p>
+<h3 id="operators-you-cant-overload---不能重载的运算符"><a class="header" href="#operators-you-cant-overload---不能重载的运算符">Operators you can’t overload  ( 不能重载的运算符)</a></h3>
+<p>在可用操作集中，有些操作符是不能重载的。限制的一般原因是安全。如果这些操作符可以重载，就会在某种程度上危及或破坏安全机制，增加工作难度，或混淆现有做法。</p>
+<ul>
+<li>成员选择<strong>operator.</strong>。目前，圆点对类中的任何成员都有意义，但如果允许重载圆点，就不能以正常方式访问成员，而必须使用指针和箭头 <strong>operator-&gt;</strong>。</li>
+<li>成员指针取消引用 <strong>operator.</strong>*，原因与 **operator.**相同。</li>
+<li>没有指数运算符。最流行的选择是 Fortran 中的 <strong>operator</strong>**，但这引起了难以解析的问题。此外，C 语言没有幂运算符，所以 C++ 似乎也不需要，因为你总是可以执行函数调用。幂运算符会增加一个方便的符号，但不会增加新的语言功能，也不会增加编译器的复杂性。</li>
+<li>没有用户定义的运算符。也就是说，你不能编造新的运算符，而这些运算符目前又不在运算符集中。问题的一部分在于如何确定优先级，问题的另一部分在于没有充分考虑必要的麻烦。</li>
+<li>你不能改变先例规则。要记住这些规则已经够难的了，还得让别人来玩。</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h2 id="non-member-operators--非成员操作符"><a class="header" href="#non-member-operators--非成员操作符">Non-member operators  (非成员操作符)</a></h2>
+<p>在前面的一些例子中，操作符可能是成员，也可能是非成员，似乎没有太大区别。这通常会引发一个问题："我应该选择哪一个？一般来说，如果没有什么区别，就应该是成员，以强调操作符与其类之间的关联。当左侧操作数始终是当前类的对象时，这种做法就行得通。</p>
+<p>不过，有时你希望左侧操作数是其他类的对象。当操作符 <strong>&lt;&lt;</strong> 和 <strong>&gt;&gt;</strong> 被重载为 iostreams 时，就会出现这种情况。由于 iostreams 是一个基本的 C++ 库，你可能会希望在大多数类中重载这些操作符，因此这个过程值得记忆：</p>
+<pre><code class="language-cpp">&gt; //: C12:IostreamOperatorOverloading.cpp
+&gt; // Example of non-member overloaded operators
+&gt; #include "../require.h"
+&gt; #include &lt;iostream&gt;
+&gt; #include &lt;sstream&gt; // "String streams"
+&gt; #include &lt;cstring&gt;
+&gt; using namespace std;
+&gt; 
+&gt; class IntArray {
+&gt;   enum { sz = 5 };
+&gt;   int i[sz];
+&gt; public:
+&gt;   IntArray() { memset(i, 0, sz* sizeof(*i)); }
+&gt;   int&amp; operator[](int x) {
+&gt;     require(x &gt;= 0 &amp;&amp; x &lt; sz,
+&gt;       "IntArray::operator[] out of range");
+&gt;     return i[x];
+&gt;   }
+&gt;   friend ostream&amp;
+&gt;     operator&lt;&lt;(ostream&amp; os, const IntArray&amp; ia);
+&gt;   friend istream&amp;
+&gt;     operator&gt;&gt;(istream&amp; is, IntArray&amp; ia);
+&gt; };
+&gt; 
+&gt; ostream&amp; 
+&gt; operator&lt;&lt;(ostream&amp; os, const IntArray&amp; ia) {
+&gt;   for(int j = 0; j &lt; ia.sz; j++) {
+&gt;     os &lt;&lt; ia.i[j];
+&gt;     if(j != ia.sz -1)
+&gt;       os &lt;&lt; ", ";
+&gt;   }
+&gt;   os &lt;&lt; endl;
+&gt;   return os;
+&gt; }
+&gt; 
+&gt; istream&amp; operator&gt;&gt;(istream&amp; is, IntArray&amp; ia){
+&gt;   for(int j = 0; j &lt; ia.sz; j++)
+&gt;     is &gt;&gt; ia.i[j];
+&gt;   return is;
+&gt; }
+&gt; 
+&gt; int main() {
+&gt;   stringstream input("47 34 56 92 103");
+&gt;   IntArray I;
+&gt;   input &gt;&gt; I;
+&gt;   I[4] = -1; // Use overloaded operator[]
+&gt;   cout &lt;&lt; I;
+&gt; } ///:~
+</code></pre>
+<p>该类还包含一个重载的 <strong>操作符 [ ]</strong> ，它返回数组中一个合法值的引用。因为返回的是引用，所以表达式</p>
+<pre><code class="language-cpp">&gt; I[4] = -1;
+</code></pre>
+<p>不仅看起来比使用指针文明得多，而且还能达到预期效果。</p>
+<p>重要的是，重载的移位操作符传递和返回_by reference_，因此操作将影响外部对象。在函数定义中，表达式如</p>
+<pre><code class="language-cpp">&gt; os &lt;&lt; ia.i[j];
+</code></pre>
+<p>会导致调用 <em>existing</em> 重载的操作符函数（即 <strong>&lt; iostream&gt;</strong> 中定义的函数）。在本例中，调用的函数是<strong>ostream&amp; operator&lt;&lt;( ostream&amp;, int)</strong> ，因为<strong>ia.i[j]<strong>解析为</strong>int</strong>。</p>
+<p>一旦对 <strong>istream</strong> 或 <strong>ostream</strong> 执行了所有操作，就会将其返回，以便在更复杂的表达式中使用。</p>
+<p>在 <strong>main( )</strong> 中，使用了一种新的 <strong>iostream</strong> 类型：<strong>stringstream</strong>（在 <strong>&lt; sstream&gt;</strong> 中声明）。这个类可以接收一个<strong>字符串</strong>（如图所示，它可以从一个<strong>字符</strong>数组创建字符串），并将其转化为一个<strong>iostream</strong>。在上面的例子中，这意味着无需打开文件或在命令行上输入数据，就能测试移位操作符。</p>
+<p>本例中插入器和提取器的形式是标准的。如果您想为自己的类创建这些操作符，请复制上面的函数签名和返回类型，并遵循主体的形式。</p>
+<h3 id="basic-guidelines-基本准则"><a class="header" href="#basic-guidelines-基本准则">Basic guidelines (基本准则)</a></h3>
+<p>默里[[49]]（#fn49）提出了这些在成员和非成员之间做出选择的准则：</p>
+<div style = "text-align: center;">
+<img src="TICPP/12/D:\mbook\TICPP\src\TICPP\schema\12\TV1.png" alt="图片alt" title="图片title"></div>
+<div style="break-before: page; page-break-before: always;"></div><h2 id="overloading-assignment-重载赋值"><a class="header" href="#overloading-assignment-重载赋值">Overloading assignment (重载赋值)</a></h2>
+<p>赋值是初学 C++ 的程序员经常感到困惑的一个问题。毫无疑问，这是因为 <strong>=</strong> 符号是编程中的基本操作符，就连在机器级复制寄存器也是如此。此外，在使用 <strong>=</strong> 符号时，有时还会调用复制构造函数（第 11 章中有介绍）：</p>
+<pre><code class="language-cpp">&gt; MyType b;
+&gt; MyType a = b;
+&gt; a = b;
+</code></pre>
+<p>在第二行中，对象 <strong>a</strong> 正在被定义。一个新对象正在被创建，而之前并不存在。因为你现在已经知道 C++ 编译器在对象初始化方面有多么严防死守，所以你知道在定义对象时必须调用一个构造函数。但哪个构造函数呢？<strong>a</strong>是从已有的<strong>MyType</strong>对象（<strong>b</strong>，在等号的右边）创建的，所以只有一个选择：复制构造函数。即使涉及等号，也会调用复制构造函数。</p>
+<p>在第三行中，情况有所不同。在等号的左边，有一个已经初始化的对象。显然，我们不能为一个已经创建的对象调用构造函数。在这种情况下，<strong>MyType::operator=</strong> 会为 <strong>a</strong>调用，并将右侧出现的内容作为参数。(您可以使用多个 <strong>operator=</strong> 函数来获取不同类型的右侧参数）。</p>
+<p>这种行为并不局限于复制构造函数。在使用 <strong>=</strong> 而非构造函数的普通函数调用形式初始化对象时，编译器都会寻找一个能接受右侧内容的构造函数：</p>
+<pre><code class="language-cpp">&gt; //: C12:CopyingVsInitialization.cpp
+&gt; class Fi {
+&gt; public:
+&gt;   Fi() {}
+&gt; };
+&gt; 
+&gt; class Fee {
+&gt; public:
+&gt;   Fee(int) {}
+&gt;   Fee(const Fi&amp;) {}
+&gt; };
+&gt; 
+&gt; int main() {
+&gt;   Fee fee = 1; // Fee(int)
+&gt;   Fi fi;
+&gt;   Fee fum = fi; // Fee(Fi)
+&gt; } ///:~
+</code></pre>
+<p>在使用 <strong>=</strong> 符号时，必须牢记这一区别： 如果对象尚未创建，则需要进行初始化；否则将使用赋值<strong>operator=</strong>。</p>
+<p>最好不要编写使用 <strong>=</strong> 进行初始化的代码，而应始终使用显式构造函数形式。这样，两个带等号的构造函数就变成了</p>
+<pre><code class="language-cpp">&gt; Fee fee(1);
+&gt; Fee fum(fi);
+</code></pre>
+<p>这样，您就可以避免读者感到困惑。</p>
+<h3 id="behavior-of-operator--操作符-的行为--"><a class="header" href="#behavior-of-operator--操作符-的行为--">Behavior of operator=  (操作符= 的行为  )</a></h3>
+<p>在 <strong>Integer.h</strong> 和 <strong>Byte.h</strong> 中，您看到 <strong>operator=</strong> 只能是一个成员函数。它与'<strong>=</strong>'左边的对象密切相关。如果可以全局定义<strong>operator=</strong>，那么您可能会尝试重新定义内置的'<strong>=</strong>'符号：</p>
+<pre><code class="language-cpp">&gt; int operator=(int, MyType); // Global = not allowed!
+</code></pre>
+<p>编译器会强迫你将 <strong>operator=</strong> 作为成员函数，从而回避整个问题。</p>
+<p>创建 <strong>operator=</strong> 时，必须将右侧对象中的所有必要信息复制到当前对象（即 <strong>operator=</strong> 被调用的对象）中，以便为类执行任何你认为的 "赋值 "操作符。对于简单对象，这一点显而易见：</p>
+<pre><code class="language-cpp">&gt; //: C12:SimpleAssignment.cpp
+&gt; // Simple operator=()
+&gt; #include &lt;iostream&gt;
+&gt; 
+&gt; using namespace std;
+&gt; 
+&gt; class Value {
+&gt;   int a, b;
+&gt;   float c;
+&gt; public:
+&gt;   Value(int aa = 0, int bb = 0, float cc = 0.0)
+&gt;     : a(aa), b(bb), c(cc) {}
+&gt;   Value&amp; operator=(const Value&amp; rv) {
+&gt;     a = rv.a;
+&gt;     b = rv.b;
+&gt;     c = rv.c;
+&gt;     return *this;
+&gt;   }
+&gt;   friend ostream&amp;
+&gt;   operator&lt;&lt;(ostream&amp; os, const Value&amp; rv) {
+&gt;     return os &lt;&lt; "a = " &lt;&lt; rv.a &lt;&lt; ", b = "
+&gt;       &lt;&lt; rv.b &lt;&lt; ", c = " &lt;&lt; rv.c;
+&gt;   }
+&gt; };
+&gt; 
+&gt; int main() {
+&gt;   Value a, b(1, 2, 3.3);
+&gt;   cout &lt;&lt; "a: " &lt;&lt; a &lt;&lt; endl;
+&gt;   cout &lt;&lt; "b: " &lt;&lt; b &lt;&lt; endl;
+&gt;   a = b;
+&gt;   cout &lt;&lt; "a after assignment: " &lt;&lt; a &lt;&lt; endl;
+&gt; } ///:~
+&gt; 
+</code></pre>
+<p>在这里，<strong>=</strong> 左边的对象复制了右边对象的所有元素，然后返回对自身的引用，这样就可以创建一个更复杂的表达式。</p>
+<p>这个示例包含一个常见错误。在给两个相同类型的对象赋值时，应首先检查是否存在自赋值：对象是否被赋值给了自己？在某些情况下，比如本例，无论如何进行赋值操作都是无害的，但如果对类的实现进行了修改，就会产生不同的效果，如果不按习惯进行，就可能会忘记，从而导致难以发现的错误。</p>
+<h4 id="pointers-in-classes--类中的指针"><a class="header" href="#pointers-in-classes--类中的指针">Pointers in classes  (类中的指针)</a></h4>
+<p>如果对象不那么简单会怎样？例如，如果对象包含指向其他对象的指针怎么办？简单地复制指针意味着最终会有两个对象指向同一个存储位置。在这种情况下，你需要自己进行记账。</p>
+<p>解决这个问题有两种常见的方法。最简单的方法是在进行赋值或复制构造时，复制指针所指的任何内容。这种方法简单明了：</p>
+<pre><code class="language-cpp">&gt; //: C12:CopyingWithPointers.cpp
+&gt; // Solving the pointer aliasing problem by
+&gt; // duplicating what is pointed to during 
+&gt; // assignment and copy-construction.
+&gt; #include "../require.h"
+&gt; #include &lt;string&gt;
+&gt; #include &lt;iostream&gt;
+&gt; using namespace std;
+&gt; 
+&gt; class Dog {
+&gt;   string nm;
+&gt; public:
+&gt;   Dog(const string&amp; name) : nm(name) {
+&gt;     cout &lt;&lt; "Creating Dog: " &lt;&lt; *this &lt;&lt; endl;
+&gt;   }
+&gt;   // Synthesized copy-constructor &amp; operator= 
+&gt;   // are correct.
+&gt;   // Create a Dog from a Dog pointer:
+&gt;   Dog(const Dog* dp, const string&amp; msg) 
+&gt;     : nm(dp-&gt;nm + msg) {
+&gt;     cout &lt;&lt; "Copied dog " &lt;&lt; *this &lt;&lt; " from "
+&gt;          &lt;&lt; *dp &lt;&lt; endl;
+&gt;   }
+&gt;   ~Dog() { 
+&gt;     cout &lt;&lt; "Deleting Dog: " &lt;&lt; *this &lt;&lt; endl;
+&gt;   }
+&gt;   void rename(const string&amp; newName) {
+&gt;     nm = newName;
+&gt;     cout &lt;&lt; "Dog renamed to: " &lt;&lt; *this &lt;&lt; endl;
+&gt;   }
+&gt;   friend ostream&amp;
+&gt;   operator&lt;&lt;(ostream&amp; os, const Dog&amp; d) {
+&gt;     return os &lt;&lt; "[" &lt;&lt; d.nm &lt;&lt; "]";
+&gt;   }
+&gt; };
+&gt; 
+&gt; class DogHouse {
+&gt;   Dog* p;
+&gt;   string houseName;
+&gt; public:
+&gt;   DogHouse(Dog* dog, const string&amp; house)
+&gt;    : p(dog), houseName(house) {}
+&gt;   DogHouse(const DogHouse&amp; dh)
+&gt;     : p(new Dog(dh.p, " copy-constructed")),
+&gt;       houseName(dh.houseName 
+&gt;         + " copy-constructed") {}
+&gt;   DogHouse&amp; operator=(const DogHouse&amp; dh) {
+&gt;     // Check for self-assignment:
+&gt;     if(&amp;dh != this) {
+&gt;       p = new Dog(dh.p, " assigned");
+&gt;       houseName = dh.houseName + " assigned";
+&gt;     }
+&gt;     return *this;
+&gt;   }
+&gt;   void renameHouse(const string&amp; newName) {
+&gt;     houseName = newName;
+&gt;   }
+&gt;   Dog* getDog() const { return p; }
+&gt;   ~DogHouse() { delete p; }
+&gt;   friend ostream&amp;
+&gt;   operator&lt;&lt;(ostream&amp; os, const DogHouse&amp; dh) {
+&gt;     return os &lt;&lt; "[" &lt;&lt; dh.houseName 
+&gt;       &lt;&lt; "] contains " &lt;&lt; *dh.p;
+&gt;   }
+&gt; }; 
+&gt; 
+&gt; int main() {
+&gt;   DogHouse fidos(new Dog("Fido"), "FidoHouse");
+&gt;   cout &lt;&lt; fidos &lt;&lt; endl;
+&gt;   DogHouse fidos2 = fidos; // Copy construction
+&gt;   cout &lt;&lt; fidos2 &lt;&lt; endl;
+&gt;   fidos2.getDog()-&gt;rename("Spot");
+&gt;   fidos2.renameHouse("SpotHouse");
+&gt;   cout &lt;&lt; fidos2 &lt;&lt; endl;
+&gt;   fidos = fidos2; // Assignment
+&gt;   cout &lt;&lt; fidos &lt;&lt; endl;
+&gt;   fidos.getDog()-&gt;rename("Max");
+&gt;   fidos2.renameHouse("MaxHouse");
+&gt; } ///:~
+</code></pre>
+<p><strong>狗</strong>是一个简单的类，只包含一个<strong>字符串</strong>，用来保存狗的名字。不过，当 <strong>Dog</strong> 发生变化时，你一般都能知道，因为构造函数和析构函数在调用时都会打印信息。请注意，第二个构造函数有点像拷贝构造函数，只不过它使用的是指向<strong>狗</strong>的指针而不是引用，而且它的第二个参数是一条与参数<strong>狗</strong>的名称相串联的信息。这有助于追踪程序的行为。</p>
+<p>你可以看到，每当成员函数打印信息时，它并不直接访问该信息，而是将 <em><strong>this</strong> 发送给 <strong>cout</strong> 。这反过来又调用了</em><em>ostream</em>* <strong>操作符&lt;&lt;</strong>。这样做很有价值，因为如果你想重新格式化<strong>Dog</strong>信息的显示方式（就像我添加'['和']'一样），你只需要在一个地方进行操作即可。</p>
+<p>一个<strong>DogHouse</strong>包含一只<strong>Dog</strong>*，并演示了当类中包含指针时需要定义的四个函数：所有必要的普通构造函数、复制构造函数、<strong>operator=</strong>（定义或禁止）和一个析构函数。<strong>operator=</strong> 当然要检查自赋值，尽管它在这里并非严格必要。这几乎消除了在修改代码时忘记检查自赋值的可能性。</p>
+<h4 id="reference-counting-引用计数"><a class="header" href="#reference-counting-引用计数">Reference Counting (引用计数)</a></h4>
+<p>在上面的示例中，复制构造函数和 <strong>operator=</strong> 为指针指向的对象制作了一个新副本，而析构函数则删除了它。但是，如果你的对象需要大量内存或较高的初始化开销，你可能希望避免这种复制。解决这一问题的常用方法是_引用计数_。你可以为被指向的对象提供智能，让它知道有多少个对象在指向它。然后，复制-构造或赋值意味着将另一个指针附加到现有对象上，并增加引用计数。销毁指的是减少引用计数，并在引用计数为零时销毁对象。</p>
+<p>但如果你想写入对象（上例中的<strong>狗</strong>）呢？可能有不止一个对象在使用这个<strong>狗</strong>，所以你在修改自己的<strong>狗</strong>的同时，也在修改别人的<strong>狗</strong>，这似乎不太友好。为了解决这个 "别名 "问题，我们使用了一种名为 "写入时复制"（<em>copy-on-write</em>）的附加技术。在写入内存块之前，要确保没有其他人正在使用该内存块。如果引用计数大于 1，那么在写入该内存块之前，必须为自己复制一份该内存块的个人副本，这样就不会打扰别人的地盘了。下面是一个引用计数和写时拷贝的简单示例：</p>
+<pre><code class="language-cpp">&gt; //: C12:ReferenceCounting.cpp
+&gt; // Reference count, copy-on-write
+&gt; #include "../require.h"
+&gt; #include &lt;string&gt;
+&gt; #include &lt;iostream&gt;
+&gt; using namespace std;
+&gt; 
+&gt; class Dog {
+&gt;   string nm;
+&gt;   int refcount;
+&gt;   Dog(const string&amp; name) 
+&gt;     : nm(name), refcount(1) {
+&gt;     cout &lt;&lt; "Creating Dog: " &lt;&lt; *this &lt;&lt; endl;
+&gt;   }
+&gt;   // Prevent assignment:
+&gt;   Dog&amp; operator=(const Dog&amp; rv);
+&gt; public:
+&gt;   // Dogs can only be created on the heap:
+&gt;   static Dog* make(const string&amp; name) {
+&gt;     return new Dog(name);
+&gt;   }
+&gt;   Dog(const Dog&amp; d) 
+&gt;     : nm(d.nm + " copy"), refcount(1) {
+&gt;     cout &lt;&lt; "Dog copy-constructor: " 
+&gt;          &lt;&lt; *this &lt;&lt; endl;
+&gt;   }
+&gt;   ~Dog() { 
+&gt;     cout &lt;&lt; "Deleting Dog: " &lt;&lt; *this &lt;&lt; endl;
+&gt;   }
+&gt;   void attach() { 
+&gt;     ++refcount;
+&gt;     cout &lt;&lt; "Attached Dog: " &lt;&lt; *this &lt;&lt; endl;
+&gt;   }
+&gt;   void detach() {
+&gt;     require(refcount != 0);
+&gt;     cout &lt;&lt; "Detaching Dog: " &lt;&lt; *this &lt;&lt; endl;
+&gt;     // Destroy object if no one is using it:
+&gt;     if(--refcount == 0) delete this;
+&gt;   }
+&gt;   // Conditionally copy this Dog.
+&gt;   // Call before modifying the Dog, assign
+&gt;   // resulting pointer to your Dog*.
+&gt;   Dog* unalias() {
+&gt;     cout &lt;&lt; "Unaliasing Dog: " &lt;&lt; *this &lt;&lt; endl;
+&gt;     // Don't duplicate if not aliased:
+&gt;     if(refcount == 1) return this;
+&gt;     --refcount;
+&gt;     // Use copy-constructor to duplicate:
+&gt;     return new Dog(*this);
+&gt;   }
+&gt;   void rename(const string&amp; newName) {
+&gt;     nm = newName;
+&gt;     cout &lt;&lt; "Dog renamed to: " &lt;&lt; *this &lt;&lt; endl;
+&gt;   }
+&gt;   friend ostream&amp;
+&gt;   operator&lt;&lt;(ostream&amp; os, const Dog&amp; d) {
+&gt;     return os &lt;&lt; "[" &lt;&lt; d.nm &lt;&lt; "], rc = " 
+&gt;       &lt;&lt; d.refcount;
+&gt;   }
+&gt; };
+&gt; 
+&gt; class DogHouse {
+&gt;   Dog* p;
+&gt;   string houseName;
+&gt; public:
+&gt;   DogHouse(Dog* dog, const string&amp; house)
+&gt;    : p(dog), houseName(house) {
+&gt;     cout &lt;&lt; "Created DogHouse: "&lt;&lt; *this &lt;&lt; endl;
+&gt;   }
+&gt;   DogHouse(const DogHouse&amp; dh)
+&gt;     : p(dh.p),
+&gt;       houseName("copy-constructed " + 
+&gt;         dh.houseName) {
+&gt;     p-&gt;attach();
+&gt;     cout &lt;&lt; "DogHouse copy-constructor: "
+&gt;          &lt;&lt; *this &lt;&lt; endl;
+&gt;   }
+&gt;   DogHouse&amp; operator=(const DogHouse&amp; dh) {
+&gt;     // Check for self-assignment:
+&gt;     if(&amp;dh != this) {
+&gt;       houseName = dh.houseName + " assigned";
+&gt;       // Clean up what you're using first:
+&gt;       p-&gt;detach();
+&gt;       p = dh.p; // Like copy-constructor
+&gt;       p-&gt;attach();
+&gt;     }
+&gt;     cout &lt;&lt; "DogHouse operator= : "
+&gt;          &lt;&lt; *this &lt;&lt; endl;
+&gt;     return *this;
+&gt;   }
+&gt;   // Decrement refcount, conditionally destroy
+&gt;   ~DogHouse() {
+&gt;     cout &lt;&lt; "DogHouse destructor: " 
+&gt;          &lt;&lt; *this &lt;&lt; endl;
+&gt;     p-&gt;detach(); 
+&gt;   }
+&gt;   void renameHouse(const string&amp; newName) {
+&gt;     houseName = newName;
+&gt;   }
+&gt;   void unalias() { p = p-&gt;unalias(); }
+&gt;   // Copy-on-write. Anytime you modify the 
+&gt;   // contents of the pointer you must 
+&gt;   // first unalias it:
+&gt;   void renameDog(const string&amp; newName) {
+&gt;     unalias();
+&gt;     p-&gt;rename(newName);
+&gt;   }
+&gt;   // ... or when you allow someone else access:
+&gt;   Dog* getDog() {
+&gt;     unalias();
+&gt;     return p; 
+&gt;   }
+&gt;   friend ostream&amp;
+&gt;   operator&lt;&lt;(ostream&amp; os, const DogHouse&amp; dh) {
+&gt;     return os &lt;&lt; "[" &lt;&lt; dh.houseName 
+&gt;       &lt;&lt; "] contains " &lt;&lt; *dh.p;
+&gt;   }
+&gt; }; 
+&gt; 
+&gt; int main() {
+&gt;   DogHouse 
+&gt;     fidos(Dog::make("Fido"), "FidoHouse"),
+&gt;     spots(Dog::make("Spot"), "SpotHouse");
+&gt;   cout &lt;&lt; "Entering copy-construction" &lt;&lt; endl;
+&gt;   DogHouse bobs(fidos);
+&gt;   cout &lt;&lt; "After copy-constructing bobs" &lt;&lt; endl;
+&gt;   cout &lt;&lt; "fidos:" &lt;&lt; fidos &lt;&lt; endl;
+&gt;   cout &lt;&lt; "spots:" &lt;&lt; spots &lt;&lt; endl;
+&gt;   cout &lt;&lt; "bobs:" &lt;&lt; bobs &lt;&lt; endl;
+&gt;   cout &lt;&lt; "Entering spots = fidos" &lt;&lt; endl;
+&gt;   spots = fidos;
+&gt;   cout &lt;&lt; "After spots = fidos" &lt;&lt; endl;
+&gt;   cout &lt;&lt; "spots:" &lt;&lt; spots &lt;&lt; endl;
+&gt;   cout &lt;&lt; "Entering self-assignment" &lt;&lt; endl;
+&gt;   bobs = bobs;
+&gt;   cout &lt;&lt; "After self-assignment" &lt;&lt; endl;
+&gt;   cout &lt;&lt; "bobs:" &lt;&lt; bobs &lt;&lt; endl;
+&gt;   // Comment out the following lines:
+&gt;   cout &lt;&lt; "Entering rename(\"Bob\")" &lt;&lt; endl;
+&gt;   bobs.getDog()-&gt;rename("Bob");
+&gt;   cout &lt;&lt; "After rename(\"Bob\")" &lt;&lt; endl;
+&gt; } ///:~
+</code></pre>
+<p>类 <strong>Dog</strong> 是 <strong>DogHouse</strong> 指向的对象。它包含一个引用计数以及控制和读取引用计数的函数。还有一个复制构造函数，这样你就可以从一个已有的<strong>Dog</strong>中创建一个新的<strong>Dog</strong>。</p>
+<p><strong>attach( )</strong> 函数会增加<strong>Dog</strong>的引用计数，以表示有另一个对象在使用它。<strong>detach( )</strong> 会减少引用计数。如果引用计数为零，则表示没有人再使用它，因此成员函数会通过<strong>delete this</strong>来销毁自己的对象。</p>
+<p>在进行任何修改（如重命名<strong>狗</strong>）之前，应确保不会更改其他对象正在使用的<strong>狗</strong>。为此，你可以调用 <strong>DogHouse::unalias( )</strong>，然后再调用 <strong>Dog::unalias( )</strong>。如果引用数为 1（即没有其他对象指向该<strong>Dog</strong>），后一个函数将返回现有的<strong>Dog</strong>指针，但如果引用数超过 1，则会复制该<strong>Dog</strong>。</p>
+<p>复制构造函数没有创建自己的内存，而是将<strong>Dog</strong>赋值给源对象的<strong>Dog</strong>。然后，由于现在有一个额外的对象在使用该内存块，它会通过调用 <strong>Dog::attach( )</strong> 来增加引用计数。</p>
+<p><strong>operator=</strong> 操作符处理的对象已在 <strong>=</strong> 左侧创建，因此它必须首先通过调用 <strong>detach( )</strong> 来清理该 <strong>Dog</strong> ，如果没有其他人使用该 <strong>Dog</strong> ，它将销毁旧的 <strong>Dog</strong> 。然后，<strong>operator=</strong> 重复拷贝构造函数的行为。请注意，它首先会检查是否将同一个对象赋值给自己。</p>
+<p>析构函数调用 <strong>detach( )</strong> 来有条件地销毁 <strong>Dog</strong> 。</p>
+<p>要实现写入时复制，必须控制所有写入内存块的操作。例如，<strong>renameDog( )</strong> 成员函数允许你更改内存块中的值。但首先，它要使用 <strong>unalias( )</strong> 来防止修改别名<strong>Dog</strong>（指向一个以上 <strong>DogHouse</strong> 对象的<strong>Dog</strong>）。如果需要从一个<strong>DogHouse</strong>中生成指向一个<strong>Dog</strong>的指针，则首先要<strong>unalias( )</strong> 该指针。</p>
+<p><strong>main( )</strong> 测试实现引用计数所必须正确工作的各种函数：构造函数、复制构造函数、**操作符=**和析构函数。它还通过调用 <strong>renameDog( )</strong> 测试写入时复制。</p>
+<p>以下是输出结果（稍作格式化后）：</p>
+<pre><code class="language-cpp">&gt; Creating Dog: [Fido], rc = 1
+&gt; Created DogHouse: [FidoHouse] 
+&gt;   contains [Fido], rc = 1
+&gt; Creating Dog: [Spot], rc = 1
+&gt; Created DogHouse: [SpotHouse] 
+&gt;   contains [Spot], rc = 1
+&gt; Entering copy-construction
+&gt; Attached Dog: [Fido], rc = 2
+&gt; DogHouse copy-constructor: 
+&gt;   [copy-constructed FidoHouse] 
+&gt;     contains [Fido], rc = 2
+&gt; After copy-constructing bobs
+&gt; fidos:[FidoHouse] contains [Fido], rc = 2
+&gt; spots:[SpotHouse] contains [Spot], rc = 1
+&gt; bobs:[copy-constructed FidoHouse] 
+&gt;   contains [Fido], rc = 2
+&gt; Entering spots = fidos
+&gt; Detaching Dog: [Spot], rc = 1
+&gt; Deleting Dog: [Spot], rc = 0
+&gt; Attached Dog: [Fido], rc = 3
+&gt; DogHouse operator= : [FidoHouse assigned]
+&gt;   contains [Fido], rc = 3
+&gt; After spots = fidos
+&gt; spots:[FidoHouse assigned] contains [Fido],rc = 3
+&gt; Entering self-assignment
+&gt; DogHouse operator= : [copy-constructed FidoHouse]
+&gt;   contains [Fido], rc = 3
+&gt; After self-assignment
+&gt; bobs:[copy-constructed FidoHouse] 
+&gt;   contains [Fido], rc = 3
+&gt; Entering rename("Bob")
+&gt; After rename("Bob")
+&gt; DogHouse destructor: [copy-constructed FidoHouse]
+&gt;   contains [Fido], rc = 3
+&gt; Detaching Dog: [Fido], rc = 3
+&gt; DogHouse destructor: [FidoHouse assigned] 
+&gt;   contains [Fido], rc = 2
+&gt; Detaching Dog: [Fido], rc = 2
+&gt; DogHouse destructor: [FidoHouse] 
+&gt;   contains [Fido], rc = 1
+&gt; Detaching Dog: [Fido], rc = 1
+&gt; Deleting Dog: [Fido], rc = 0
+</code></pre>
+<p>通过研究输出结果、追踪源代码和实验程序，你将加深对这些技术的理解。</p>
+<h4 id="automatic-operator-creation--自动操作符-创建--"><a class="header" href="#automatic-operator-creation--自动操作符-创建--">Automatic operator= creation  (自动操作符= 创建  )</a></h4>
+<p>因为将一个对象赋值给另一个_同类型_的对象是大多数人都希望可以实现的活动，所以如果你没有创建<strong>type::operator=(type)</strong>，编译器会自动创建一个<strong>type::operator=(type)</strong>。该操作符的行为与自动创建的复制构造函数类似；如果类中包含对象（或继承自其他类），则会递归调用这些对象的<strong>operator=</strong>。这就是所谓的_memberwise assignment_（成员赋值）。例如</p>
+<pre><code class="language-cpp">&gt; //: C12:AutomaticOperatorEquals.cpp
+&gt; #include &lt;iostream&gt;
+&gt; using namespace std;
+&gt; 
+&gt; class Cargo {
+&gt; public:
+&gt;   Cargo&amp; operator=(const Cargo&amp;) {
+&gt;     cout &lt;&lt; "inside Cargo::operator=()" &lt;&lt; endl;
+&gt;     return *this;
+&gt;   }
+&gt; };
+&gt; 
+&gt; class Truck {
+&gt;   Cargo b;
+&gt; };
+&gt; 
+&gt; int main() {
+&gt;   Truck a, b;
+&gt;   a = b; // Prints: "inside Cargo::operator=()"
+&gt; } ///:~
+</code></pre>
+<p>为 <strong>Truck</strong> 自动生成的 <strong>operator=</strong> 调用 <strong>Cargo::operator=</strong> 。</p>
+<p>一般来说，您不希望让编译器代劳。对于任何复杂的类（尤其是包含指针的类！），你都希望明确地创建一个 <strong>operator=</strong> 。如果实在不想让别人执行赋值，可以将 <strong>operator=</strong> 声明为 <strong>private</strong> 函数。(除非在类内部使用，否则不需要定义它）。</p>
+<div style="break-before: page; page-break-before: always;"></div><h2 id="automatic-type-conversion-自动类型转换"><a class="header" href="#automatic-type-conversion-自动类型转换">Automatic type conversion (自动类型转换)</a></h2>
+<p>在 C 和 C++ 中，如果编译器看到一个表达式或函数调用使用的类型与编译器需要的类型不符，编译器通常会执行自动类型转换，从编译器拥有的类型转换为编译器需要的类型。在 C++ 中，通过定义自动类型转换函数，可以为用户定义的类型实现同样的效果。这些函数有两种：一种是特定类型的构造函数，另一种是重载操作符。</p>
+<h3 id="constructor-conversion-构造器转换"><a class="header" href="#constructor-conversion-构造器转换">Constructor conversion (构造器转换)</a></h3>
+<p>如果定义的构造函数将另一种类型的对象（或引用）作为其唯一参数，则该构造函数允许编译器执行自动类型转换。例如</p>
+<pre><code class="language-cpp">&gt; //: C12:AutomaticTypeConversion.cpp
+&gt; // Type conversion constructor
+&gt; class One {
+&gt; public:
+&gt;   One() {}
+&gt; };
+&gt; 
+&gt; class Two {
+&gt; public:
+&gt;   Two(const One&amp;) {}
+&gt; };
+&gt; 
+&gt; void f(Two) {}
+&gt; 
+&gt; int main() {
+&gt;   One one;
+&gt;   f(one); // Wants a Two, has a One
+&gt; } ///:~
+</code></pre>
+<p>当编译器看到 <strong>f( )</strong> 被一个 <strong>One</strong> 对象调用时，它会查看 <strong>f( )</strong> 的声明，并注意到它需要一个 <strong>Two</strong>。然后，编译器会查看是否有任何方法可以从 <strong>One</strong> 对象得到 <strong>Two</strong>，并找到构造函数 <strong>Two::Two(One)</strong>，然后静静地调用该构造函数。得到的 <strong>Two</strong> 对象将交给 <strong>f( )</strong>。</p>
+<p>在这种情况下，自动类型转换免去了定义两个重载版本 <strong>f( )</strong> 的麻烦。不过，代价是隐藏了对 <strong>Two</strong> 的构造函数调用，如果你关心 <strong>f( )</strong> 的调用效率，这一点可能很重要。</p>
+<h4 id="preventing-constructor-conversion--防止构造函数转换--"><a class="header" href="#preventing-constructor-conversion--防止构造函数转换--">Preventing constructor conversion  (防止构造函数转换  )</a></h4>
+<p>有时，通过构造函数进行自动类型转换会造成问题。要关闭自动类型转换，可以在构造函数前添加关键字<strong>explicit</strong>（只适用于构造函数）。在上例中用于修改类 <strong>Two</strong> 的构造函数：</p>
+<pre><code class="language-cpp">&gt; //: C12:ExplicitKeyword.cpp
+&gt; // Using the "explicit" keyword
+&gt; class One {
+&gt; public:
+&gt;   One() {}
+&gt; };
+&gt; 
+&gt; class Two {
+&gt; public:
+&gt;   explicit Two(const One&amp;) {}
+&gt; };
+&gt; 
+&gt; void f(Two) {}
+&gt; 
+&gt; int main() {
+&gt;   One one;
+&gt; //!  f(one); // No auto conversion allowed
+&gt;   f(Two(one)); // OK -- user performs conversion
+&gt; } ///:~
+</code></pre>
+<p>将<strong>Two</strong>的构造函数设为显式，就是告诉编译器不要使用该构造函数执行任何自动转换（该类中其他非<strong>显式</strong>的构造函数仍可执行自动转换）。如果用户想进行转换，就必须写出代码。在上面的代码中，<strong>f(Two(one))</strong> 从 <strong>one</strong> 创建了一个 <strong>Two</strong> 类型的临时对象，就像编译器在上一版本中所做的那样。</p>
+<h3 id="operator-conversion-操作符转换"><a class="header" href="#operator-conversion-操作符转换">Operator conversion (操作符转换)</a></h3>
+<p>实现自动类型转换的第二种方法是操作符重载。您可以创建一个成员函数，使用<strong>操作符</strong>关键字，将当前类型转换为希望转换的类型。这种形式的操作符重载很特别，因为你不需要指定返回类型，返回类型就是重载操作符的 <em>name</em> 。下面是一个例子：</p>
+<pre><code class="language-cpp">&gt; //: C12:OperatorOverloadingConversion.cpp
+&gt; class Three {
+&gt;   int i;
+&gt; public:
+&gt;   Three(int ii = 0, int = 0) : i(ii) {}
+&gt; };
+&gt; 
+&gt; class Four {
+&gt;   int x;
+&gt; public:
+&gt;   Four(int xx) : x(xx) {}
+&gt;   operator Three() const { return Three(x); }
+&gt; };
+&gt; 
+&gt; void g(Three) {}
+&gt; 
+&gt; int main() {
+&gt;   Four four(1);
+&gt;   g(four);
+&gt;   g(1);  // Calls Three(1,0)
+&gt; } ///:~
+</code></pre>
+<p>使用构造函数技术时，目的类执行转换，而使用操作符时，源类执行转换。构造函数技术的价值在于，当你创建一个新类时，可以在现有系统中添加一个新的转换路径。然而，创建单参数构造函数_总是_定义自动类型转换（即使有多个参数，如果其余参数被默认），这可能不是你想要的（在这种情况下，你可以使用<strong>显式</strong>将其关闭）。此外，没有办法使用构造函数从用户定义类型转换到内置类型；只有操作符重载才有可能做到这一点。</p>
+<h4 id="reflexivity--反身性"><a class="header" href="#reflexivity--反身性">Reflexivity  (反身性)</a></h4>
+<p>使用全局重载操作符而不是成员操作符的一个最方便的原因是，在全局版本中，可以对任一操作数进行自动类型转换，而在成员对象中，左侧操作数必须已经是适当的类型。如果希望同时转换两个操作数，全局版本可以节省大量代码。下面是一个小例子：</p>
+<pre><code class="language-cpp">&gt; //: C12:ReflexivityInOverloading.cpp
+&gt; class Number {
+&gt;   int i;
+&gt; public:
+&gt;   Number(int ii = 0) : i(ii) {}
+&gt;   const Number
+&gt;   operator+(const Number&amp; n) const {
+&gt;     return Number(i + n.i);
+&gt;   }
+&gt;   friend const Number
+&gt;     operator-(const Number&amp;, const Number&amp;);
+&gt; };
+&gt; 
+&gt; const Number
+&gt;   operator-(const Number&amp; n1,
+&gt;             const Number&amp; n2) {
+&gt;     return Number(n1.i - n2.i);
+&gt; }
+&gt; 
+&gt; int main() {
+&gt;   Number a(47), b(11);
+&gt;   a + b; // OK
+&gt;   a + 1; // 2nd arg converted to Number
+&gt; //! 1 + a; // Wrong! 1st arg not of type Number
+&gt;   a - b; // OK
+&gt;   a - 1; // 2nd arg converted to Number
+&gt;   1 - a; // 1st arg converted to Number
+&gt; } ///:~
+</code></pre>
+<p>类 <strong>Number</strong> 既有一个成员 <strong>operator+</strong> 也有一个 <strong>friend</strong> <strong>operator-</strong> 。因为有一个只接受一个 <strong>int</strong> 参数的构造函数，一个 <strong>int</strong> 可以自动转换成一个 <strong>Number</strong>，但前提是条件正确。在<strong>main( )<strong>中，你可以看到将一个</strong>Number</strong>添加到另一个<strong>Number</strong>中的操作是正常的，因为它与重载操作符完全匹配。此外，当编译器看到一个<strong>Number</strong>后跟一个**+<strong>和一个</strong>int<strong>时，它可以匹配到成员函数</strong>Number::operator+<strong>，并使用构造函数将</strong>int<strong>参数转换为一个</strong>Number**。但当看到一个 <strong>int、</strong> 一个 <strong>+</strong> 和一个 <strong>Number</strong> 时，编译器就不知道该怎么办了，因为它只有 <strong>Number::operator+</strong>，而该函数要求左操作符已经是一个 <strong>Number</strong> 对象。因此，编译器会出错。</p>
+<p>对于<strong>朋友</strong> <strong>操作符-</strong>，情况就不同了。编译器需要尽可能地填入两个参数；它并不局限于将<strong>数字</strong>作为左侧参数。因此，如果编译器看到</p>
+<pre><code class="language-cpp">&gt; 1 – a
+</code></pre>
+<p>可以使用构造函数将第一个参数转换为<strong>数字</strong>。</p>
+<p>有时，您希望通过将操作符设为成员来限制操作符的使用。例如，当矩阵与向量相乘时，向量必须在右边。但如果你希望操作符可以转换任一参数，就可以将操作符设置为友函数。</p>
+<p>幸运的是，编译器不会将 <strong>1 - 1</strong> 将两个参数都转换为 <strong>Number</strong> 对象，然后调用 <strong>operator-</strong> 。这意味着现有的 C 代码可能会突然以不同的方式运行。编译器会首先匹配 "最简单 "的可能性，即表达式 <strong>1 - 1</strong> 的内置操作符。</p>
+<h3 id="type-conversion-example-类型转换示例"><a class="header" href="#type-conversion-example-类型转换示例">Type conversion example (类型转换示例)</a></h3>
+<p>任何封装字符串的类（在本例中，我们将使用标准 C++ 的<strong>string</strong>类来实现该类，因为这很简单）都是自动类型转换非常有用的例子。如果没有自动类型转换，如果想使用标准 C 库中现有的所有字符串函数，就必须为每个函数创建一个成员函数，就像这样：</p>
+<pre><code class="language-cpp">&gt; //: C12:Strings1.cpp
+&gt; // No auto type conversion
+&gt; #include "../require.h"
+&gt; #include &lt;cstring&gt;
+&gt; #include &lt;cstdlib&gt;
+&gt; #include &lt;string&gt;
+&gt; using namespace std;
+&gt; 
+&gt; class Stringc {
+&gt;   string s;
+&gt; public:
+&gt;   Stringc(const string&amp; str = "") : s(str) {}
+&gt;   int strcmp(const Stringc&amp; S) const {
+&gt;     return ::strcmp(s.c_str(), S.s.c_str());
+&gt;   }
+&gt;   // ... etc., for every function in string.h
+&gt; };
+&gt; 
+&gt; int main() {
+&gt;   Stringc s1("hello"), s2("there");
+&gt;   s1.strcmp(s2);
+&gt; } ///:~
+</code></pre>
+<p>在这里，只创建了 <strong>strcmp( )</strong> 函数，但您必须为 <strong>&lt; cstring&gt;</strong> 中可能需要的每个函数创建一个相应的函数。幸运的是，您可以提供一个自动类型转换，允许访问 <strong>&lt; cstring&gt;</strong> 中的所有函数：</p>
+<pre><code class="language-cpp">&gt; //: C12:Strings2.cpp
+&gt; // With auto type conversion
+&gt; #include "../require.h"
+&gt; #include &lt;cstring&gt;
+&gt; #include &lt;cstdlib&gt;
+&gt; #include &lt;string&gt;
+&gt; using namespace std;
+&gt; 
+&gt; class Stringc {
+&gt;   string s;
+&gt; public:
+&gt;   Stringc(const string&amp; str = "") : s(str) {}
+&gt;   operator const char*() const { 
+&gt;     return s.c_str(); 
+&gt;   }
+&gt; };
+&gt; 
+&gt; int main() {
+&gt;   Stringc s1("hello"), s2("there");
+&gt;   strcmp(s1, s2); // Standard C function
+&gt;   strspn(s1, s2); // Any string function!
+&gt; } ///:~
+</code></pre>
+<p>现在，任何接受<strong>char</strong><em>参数的函数也可以接受</em><em>Stringc</em><em>参数，因为编译器知道如何从</em><em>Stringc</em><em>中生成</em><em>char</em>**。</p>
+<h3 id="pitfalls-in-automatic-type-conversion--自动类型转换的陷阱"><a class="header" href="#pitfalls-in-automatic-type-conversion--自动类型转换的陷阱">Pitfalls in automatic type conversion  (自动类型转换的陷阱)</a></h3>
+<p>由于编译器必须选择如何安静地执行类型转换，因此如果设计不当，编译器就会陷入困境。一个简单而明显的情况是，类<strong>X</strong>可以通过<strong>操作符 Y( )<strong>将自身转换为类</strong>Y</strong>的对象。如果类<strong>Y</strong>有一个构造函数，该构造函数接收一个<strong>X</strong>类型的参数，这就代表了相同的类型转换。编译器现在有两种方法从 <strong>X</strong> 转换到 <strong>Y</strong>，因此当发生这种转换时，编译器会产生歧义错误：</p>
+<pre><code class="language-cpp">&gt; //: C12:TypeConversionAmbiguity.cpp
+&gt; class Orange; // Class declaration
+&gt; 
+&gt; class Apple {
+&gt; public:
+&gt;   operator Orange() const; // Convert Apple to Orange
+&gt; };
+&gt; 
+&gt; class Orange {
+&gt; public:
+&gt;   Orange(Apple); // Convert Apple to Orange
+&gt; };
+&gt; 
+&gt; void f(Orange) {}
+&gt; 
+&gt; int main() {
+&gt;   Apple a;
+&gt; //! f(a); // Error: ambiguous conversion
+&gt; } ///:~
+</code></pre>
+<p>解决这个问题的办法显然是不这样做。只需提供一条从一种类型自动转换到另一种类型的路径即可。</p>
+<p>如果提供的自动转换类型不止一种，就会出现一个更难发现的问题。这种情况有时称为_fan-out_：</p>
+<pre><code class="language-cpp">&gt; //: C12:TypeConversionFanout.cpp
+&gt; class Orange {};
+&gt; class Pear {};
+&gt; 
+&gt; class Apple {
+&gt; public:
+&gt;   operator Orange() const;
+&gt;   operator Pear() const;
+&gt; };
+&gt; 
+&gt; // Overloaded eat():
+&gt; void eat(Orange);
+&gt; void eat(Pear);
+&gt; 
+&gt; int main() {
+&gt;   Apple c;
+&gt; //! eat(c);
+&gt;   // Error: Apple -&gt; Orange or Apple -&gt; Pear ???
+&gt; } ///:~
+</code></pre>
+<p>类 <strong>Apple</strong> 可以自动转换为 <strong>Orange</strong> 和 <strong>Pear</strong> 。这其中的隐患在于，除非有人不小心创建了两个重载版本的 <strong>eat( )</strong> ，否则不会有任何问题。(如果只有一个版本，<strong>main( )</strong> 中的代码就可以正常工作）。</p>
+<p>同样，解决办法--也是自动类型转换的一般注意事项--是只提供从一种类型到另一种类型的单一自动转换。你可以有到其他类型的转换，但它们不应该是_自动_的。您可以创建名称为 <strong>makeA( )</strong> 和 <strong>makeB( )</strong> 的显式函数调用。</p>
+<h4 id="hidden-activities-隐藏的活动"><a class="header" href="#hidden-activities-隐藏的活动">Hidden activities (隐藏的活动)</a></h4>
+<p>自动类型转换可能会引入比你预期更多的底层活动。作为一个小脑筋急转弯，请看对<strong>CopyingVsInitialization.cpp</strong>的修改：</p>
+<pre><code class="language-cpp">&gt; //: C12:CopyingVsInitialization2.cpp
+&gt; class Fi {};
+&gt; 
+&gt; class Fee {
+&gt; public:
+&gt;   Fee(int) {}
+&gt;   Fee(const Fi&amp;) {}
+&gt; };
+&gt; 
+&gt; class Fo {
+&gt;   int i;
+&gt; public:
+&gt;   Fo(int x = 0) : i(x) {}
+&gt;   operator Fee() const { return Fee(i); }
+&gt; };
+&gt; 
+&gt; int main() {
+&gt;   Fo fo;
+&gt;   Fee fee = fo;
+&gt; } ///:~
+</code></pre>
+<p>没有构造函数可以从 <strong>Fo</strong> 对象创建 <strong>Fee 费用</strong>。不过，<strong>Fo</strong> 可以自动转换为<strong>Fee</strong>。没有从 <strong>Fee</strong> 对象创建 <strong>Fee</strong> 的复制构造函数，但这是编译器可以为您创建的特殊函数之一。(默认构造函数、拷贝构造函数、**操作符=**和析构函数可以由编译器自动合成）。因此，对于相对无害的语句</p>
+<pre><code class="language-cpp">&gt; Fee fee = fo;
+</code></pre>
+<p>会调用自动类型转换操作符，并创建一个复制构造函数。</p>
+<p>谨慎使用自动类型转换。就像所有操作符重载一样，当自动类型转换能显著减少编码任务时，它是非常好的，但通常不值得无偿使用。</p>
+<div style="break-before: page; page-break-before: always;"></div><h2 id="summary-1"><a class="header" href="#summary-1">Summary</a></h2>
+<p>操作符重载之所以存在，就是为了让生活变得更轻松。它并没有什么特别神奇的地方；重载操作符只是一些名字很有趣的函数，当编译器发现正确的模式时，它就会为你调用函数。但是，如果操作符重载并没有给你（类的创建者）或类的用户带来明显的好处，就不要通过添加它来混淆视听。</p>
 
                     </main>
 
@@ -787,6 +2474,22 @@ int main() {
 
         </div>
 
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
 
 
 

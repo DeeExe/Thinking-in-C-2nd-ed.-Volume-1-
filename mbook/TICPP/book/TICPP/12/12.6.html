@@ -1,0 +1,478 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>12.6自动类型转换 - TICPP</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../../favicon.svg">
+        <link rel="shortcut icon" href="../../favicon.png">
+        <link rel="stylesheet" href="../../css/variables.css">
+        <link rel="stylesheet" href="../../css/general.css">
+        <link rel="stylesheet" href="../../css/chrome.css">
+        <link rel="stylesheet" href="../../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../../highlight.css">
+        <link rel="stylesheet" href="../../tomorrow-night.css">
+        <link rel="stylesheet" href="../../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../../TICPP/11/11.0.html"><strong aria-hidden="true">1.</strong> 11.References & the Copy-Constructor)</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../TICPP/11/11.1.html"><strong aria-hidden="true">1.1.</strong> 11.1C++ 中的指针</a></li><li class="chapter-item expanded "><a href="../../TICPP/11/11.2.html"><strong aria-hidden="true">1.2.</strong> 11.2C++ 中的引用</a></li><li class="chapter-item expanded "><a href="../../TICPP/11/11.3.html"><strong aria-hidden="true">1.3.</strong> 11.3拷贝构造函数</a></li><li class="chapter-item expanded "><a href="../../TICPP/11/11.4.html"><strong aria-hidden="true">1.4.</strong> 11.成员指针</a></li><li class="chapter-item expanded "><a href="../../TICPP/11/11.5.html"><strong aria-hidden="true">1.5.</strong> 11.Summary</a></li></ol></li><li class="chapter-item expanded "><a href="../../TICPP/12/12.0.html"><strong aria-hidden="true">2.</strong> 12.Operator Overloading)</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../TICPP/12/12.1.html"><strong aria-hidden="true">2.1.</strong> 12.1警告与保证</a></li><li class="chapter-item expanded "><a href="../../TICPP/12/12.2.html"><strong aria-hidden="true">2.2.</strong> 12.2语法</a></li><li class="chapter-item expanded "><a href="../../TICPP/12/12.3.html"><strong aria-hidden="true">2.3.</strong> 12.3可重载操作符</a></li><li class="chapter-item expanded "><a href="../../TICPP/12/12.4.html"><strong aria-hidden="true">2.4.</strong> 12.4非成员操作符</a></li><li class="chapter-item expanded "><a href="../../TICPP/12/12.5.html"><strong aria-hidden="true">2.5.</strong> 12.5重载赋值</a></li><li class="chapter-item expanded "><a href="../../TICPP/12/12.6.html" class="active"><strong aria-hidden="true">2.6.</strong> 12.6自动类型转换</a></li><li class="chapter-item expanded "><a href="../../TICPP/12/12.7.html"><strong aria-hidden="true">2.7.</strong> 12.7构造器转换</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">TICPP</h1>
+
+                    <div class="right-buttons">
+                        <a href="../../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="automatic-type-conversion-自动类型转换"><a class="header" href="#automatic-type-conversion-自动类型转换">Automatic type conversion (自动类型转换)</a></h2>
+<p>在 C 和 C++ 中，如果编译器看到一个表达式或函数调用使用的类型与编译器需要的类型不符，编译器通常会执行自动类型转换，从编译器拥有的类型转换为编译器需要的类型。在 C++ 中，通过定义自动类型转换函数，可以为用户定义的类型实现同样的效果。这些函数有两种：一种是特定类型的构造函数，另一种是重载操作符。</p>
+<h3 id="constructor-conversion-构造器转换"><a class="header" href="#constructor-conversion-构造器转换">Constructor conversion (构造器转换)</a></h3>
+<p>如果定义的构造函数将另一种类型的对象（或引用）作为其唯一参数，则该构造函数允许编译器执行自动类型转换。例如</p>
+<pre><code class="language-cpp">&gt; //: C12:AutomaticTypeConversion.cpp
+&gt; // Type conversion constructor
+&gt; class One {
+&gt; public:
+&gt;   One() {}
+&gt; };
+&gt; 
+&gt; class Two {
+&gt; public:
+&gt;   Two(const One&amp;) {}
+&gt; };
+&gt; 
+&gt; void f(Two) {}
+&gt; 
+&gt; int main() {
+&gt;   One one;
+&gt;   f(one); // Wants a Two, has a One
+&gt; } ///:~
+</code></pre>
+<p>当编译器看到 <strong>f( )</strong> 被一个 <strong>One</strong> 对象调用时，它会查看 <strong>f( )</strong> 的声明，并注意到它需要一个 <strong>Two</strong>。然后，编译器会查看是否有任何方法可以从 <strong>One</strong> 对象得到 <strong>Two</strong>，并找到构造函数 <strong>Two::Two(One)</strong>，然后静静地调用该构造函数。得到的 <strong>Two</strong> 对象将交给 <strong>f( )</strong>。</p>
+<p>在这种情况下，自动类型转换免去了定义两个重载版本 <strong>f( )</strong> 的麻烦。不过，代价是隐藏了对 <strong>Two</strong> 的构造函数调用，如果你关心 <strong>f( )</strong> 的调用效率，这一点可能很重要。</p>
+<h4 id="preventing-constructor-conversion--防止构造函数转换--"><a class="header" href="#preventing-constructor-conversion--防止构造函数转换--">Preventing constructor conversion  (防止构造函数转换  )</a></h4>
+<p>有时，通过构造函数进行自动类型转换会造成问题。要关闭自动类型转换，可以在构造函数前添加关键字<strong>explicit</strong>（只适用于构造函数）。在上例中用于修改类 <strong>Two</strong> 的构造函数：</p>
+<pre><code class="language-cpp">&gt; //: C12:ExplicitKeyword.cpp
+&gt; // Using the "explicit" keyword
+&gt; class One {
+&gt; public:
+&gt;   One() {}
+&gt; };
+&gt; 
+&gt; class Two {
+&gt; public:
+&gt;   explicit Two(const One&amp;) {}
+&gt; };
+&gt; 
+&gt; void f(Two) {}
+&gt; 
+&gt; int main() {
+&gt;   One one;
+&gt; //!  f(one); // No auto conversion allowed
+&gt;   f(Two(one)); // OK -- user performs conversion
+&gt; } ///:~
+</code></pre>
+<p>将<strong>Two</strong>的构造函数设为显式，就是告诉编译器不要使用该构造函数执行任何自动转换（该类中其他非<strong>显式</strong>的构造函数仍可执行自动转换）。如果用户想进行转换，就必须写出代码。在上面的代码中，<strong>f(Two(one))</strong> 从 <strong>one</strong> 创建了一个 <strong>Two</strong> 类型的临时对象，就像编译器在上一版本中所做的那样。</p>
+<h3 id="operator-conversion-操作符转换"><a class="header" href="#operator-conversion-操作符转换">Operator conversion (操作符转换)</a></h3>
+<p>实现自动类型转换的第二种方法是操作符重载。您可以创建一个成员函数，使用<strong>操作符</strong>关键字，将当前类型转换为希望转换的类型。这种形式的操作符重载很特别，因为你不需要指定返回类型，返回类型就是重载操作符的 <em>name</em> 。下面是一个例子：</p>
+<pre><code class="language-cpp">&gt; //: C12:OperatorOverloadingConversion.cpp
+&gt; class Three {
+&gt;   int i;
+&gt; public:
+&gt;   Three(int ii = 0, int = 0) : i(ii) {}
+&gt; };
+&gt; 
+&gt; class Four {
+&gt;   int x;
+&gt; public:
+&gt;   Four(int xx) : x(xx) {}
+&gt;   operator Three() const { return Three(x); }
+&gt; };
+&gt; 
+&gt; void g(Three) {}
+&gt; 
+&gt; int main() {
+&gt;   Four four(1);
+&gt;   g(four);
+&gt;   g(1);  // Calls Three(1,0)
+&gt; } ///:~
+</code></pre>
+<p>使用构造函数技术时，目的类执行转换，而使用操作符时，源类执行转换。构造函数技术的价值在于，当你创建一个新类时，可以在现有系统中添加一个新的转换路径。然而，创建单参数构造函数_总是_定义自动类型转换（即使有多个参数，如果其余参数被默认），这可能不是你想要的（在这种情况下，你可以使用<strong>显式</strong>将其关闭）。此外，没有办法使用构造函数从用户定义类型转换到内置类型；只有操作符重载才有可能做到这一点。</p>
+<h4 id="reflexivity--反身性"><a class="header" href="#reflexivity--反身性">Reflexivity  (反身性)</a></h4>
+<p>使用全局重载操作符而不是成员操作符的一个最方便的原因是，在全局版本中，可以对任一操作数进行自动类型转换，而在成员对象中，左侧操作数必须已经是适当的类型。如果希望同时转换两个操作数，全局版本可以节省大量代码。下面是一个小例子：</p>
+<pre><code class="language-cpp">&gt; //: C12:ReflexivityInOverloading.cpp
+&gt; class Number {
+&gt;   int i;
+&gt; public:
+&gt;   Number(int ii = 0) : i(ii) {}
+&gt;   const Number
+&gt;   operator+(const Number&amp; n) const {
+&gt;     return Number(i + n.i);
+&gt;   }
+&gt;   friend const Number
+&gt;     operator-(const Number&amp;, const Number&amp;);
+&gt; };
+&gt; 
+&gt; const Number
+&gt;   operator-(const Number&amp; n1,
+&gt;             const Number&amp; n2) {
+&gt;     return Number(n1.i - n2.i);
+&gt; }
+&gt; 
+&gt; int main() {
+&gt;   Number a(47), b(11);
+&gt;   a + b; // OK
+&gt;   a + 1; // 2nd arg converted to Number
+&gt; //! 1 + a; // Wrong! 1st arg not of type Number
+&gt;   a - b; // OK
+&gt;   a - 1; // 2nd arg converted to Number
+&gt;   1 - a; // 1st arg converted to Number
+&gt; } ///:~
+</code></pre>
+<p>类 <strong>Number</strong> 既有一个成员 <strong>operator+</strong> 也有一个 <strong>friend</strong> <strong>operator-</strong> 。因为有一个只接受一个 <strong>int</strong> 参数的构造函数，一个 <strong>int</strong> 可以自动转换成一个 <strong>Number</strong>，但前提是条件正确。在<strong>main( )<strong>中，你可以看到将一个</strong>Number</strong>添加到另一个<strong>Number</strong>中的操作是正常的，因为它与重载操作符完全匹配。此外，当编译器看到一个<strong>Number</strong>后跟一个**+<strong>和一个</strong>int<strong>时，它可以匹配到成员函数</strong>Number::operator+<strong>，并使用构造函数将</strong>int<strong>参数转换为一个</strong>Number**。但当看到一个 <strong>int、</strong> 一个 <strong>+</strong> 和一个 <strong>Number</strong> 时，编译器就不知道该怎么办了，因为它只有 <strong>Number::operator+</strong>，而该函数要求左操作符已经是一个 <strong>Number</strong> 对象。因此，编译器会出错。</p>
+<p>对于<strong>朋友</strong> <strong>操作符-</strong>，情况就不同了。编译器需要尽可能地填入两个参数；它并不局限于将<strong>数字</strong>作为左侧参数。因此，如果编译器看到</p>
+<pre><code class="language-cpp">&gt; 1 – a
+</code></pre>
+<p>可以使用构造函数将第一个参数转换为<strong>数字</strong>。</p>
+<p>有时，您希望通过将操作符设为成员来限制操作符的使用。例如，当矩阵与向量相乘时，向量必须在右边。但如果你希望操作符可以转换任一参数，就可以将操作符设置为友函数。</p>
+<p>幸运的是，编译器不会将 <strong>1 - 1</strong> 将两个参数都转换为 <strong>Number</strong> 对象，然后调用 <strong>operator-</strong> 。这意味着现有的 C 代码可能会突然以不同的方式运行。编译器会首先匹配 "最简单 "的可能性，即表达式 <strong>1 - 1</strong> 的内置操作符。</p>
+<h3 id="type-conversion-example-类型转换示例"><a class="header" href="#type-conversion-example-类型转换示例">Type conversion example (类型转换示例)</a></h3>
+<p>任何封装字符串的类（在本例中，我们将使用标准 C++ 的<strong>string</strong>类来实现该类，因为这很简单）都是自动类型转换非常有用的例子。如果没有自动类型转换，如果想使用标准 C 库中现有的所有字符串函数，就必须为每个函数创建一个成员函数，就像这样：</p>
+<pre><code class="language-cpp">&gt; //: C12:Strings1.cpp
+&gt; // No auto type conversion
+&gt; #include "../require.h"
+&gt; #include &lt;cstring&gt;
+&gt; #include &lt;cstdlib&gt;
+&gt; #include &lt;string&gt;
+&gt; using namespace std;
+&gt; 
+&gt; class Stringc {
+&gt;   string s;
+&gt; public:
+&gt;   Stringc(const string&amp; str = "") : s(str) {}
+&gt;   int strcmp(const Stringc&amp; S) const {
+&gt;     return ::strcmp(s.c_str(), S.s.c_str());
+&gt;   }
+&gt;   // ... etc., for every function in string.h
+&gt; };
+&gt; 
+&gt; int main() {
+&gt;   Stringc s1("hello"), s2("there");
+&gt;   s1.strcmp(s2);
+&gt; } ///:~
+</code></pre>
+<p>在这里，只创建了 <strong>strcmp( )</strong> 函数，但您必须为 <strong>&lt; cstring&gt;</strong> 中可能需要的每个函数创建一个相应的函数。幸运的是，您可以提供一个自动类型转换，允许访问 <strong>&lt; cstring&gt;</strong> 中的所有函数：</p>
+<pre><code class="language-cpp">&gt; //: C12:Strings2.cpp
+&gt; // With auto type conversion
+&gt; #include "../require.h"
+&gt; #include &lt;cstring&gt;
+&gt; #include &lt;cstdlib&gt;
+&gt; #include &lt;string&gt;
+&gt; using namespace std;
+&gt; 
+&gt; class Stringc {
+&gt;   string s;
+&gt; public:
+&gt;   Stringc(const string&amp; str = "") : s(str) {}
+&gt;   operator const char*() const { 
+&gt;     return s.c_str(); 
+&gt;   }
+&gt; };
+&gt; 
+&gt; int main() {
+&gt;   Stringc s1("hello"), s2("there");
+&gt;   strcmp(s1, s2); // Standard C function
+&gt;   strspn(s1, s2); // Any string function!
+&gt; } ///:~
+</code></pre>
+<p>现在，任何接受<strong>char</strong><em>参数的函数也可以接受</em><em>Stringc</em><em>参数，因为编译器知道如何从</em><em>Stringc</em><em>中生成</em><em>char</em>**。</p>
+<h3 id="pitfalls-in-automatic-type-conversion--自动类型转换的陷阱"><a class="header" href="#pitfalls-in-automatic-type-conversion--自动类型转换的陷阱">Pitfalls in automatic type conversion  (自动类型转换的陷阱)</a></h3>
+<p>由于编译器必须选择如何安静地执行类型转换，因此如果设计不当，编译器就会陷入困境。一个简单而明显的情况是，类<strong>X</strong>可以通过<strong>操作符 Y( )<strong>将自身转换为类</strong>Y</strong>的对象。如果类<strong>Y</strong>有一个构造函数，该构造函数接收一个<strong>X</strong>类型的参数，这就代表了相同的类型转换。编译器现在有两种方法从 <strong>X</strong> 转换到 <strong>Y</strong>，因此当发生这种转换时，编译器会产生歧义错误：</p>
+<pre><code class="language-cpp">&gt; //: C12:TypeConversionAmbiguity.cpp
+&gt; class Orange; // Class declaration
+&gt; 
+&gt; class Apple {
+&gt; public:
+&gt;   operator Orange() const; // Convert Apple to Orange
+&gt; };
+&gt; 
+&gt; class Orange {
+&gt; public:
+&gt;   Orange(Apple); // Convert Apple to Orange
+&gt; };
+&gt; 
+&gt; void f(Orange) {}
+&gt; 
+&gt; int main() {
+&gt;   Apple a;
+&gt; //! f(a); // Error: ambiguous conversion
+&gt; } ///:~
+</code></pre>
+<p>解决这个问题的办法显然是不这样做。只需提供一条从一种类型自动转换到另一种类型的路径即可。</p>
+<p>如果提供的自动转换类型不止一种，就会出现一个更难发现的问题。这种情况有时称为_fan-out_：</p>
+<pre><code class="language-cpp">&gt; //: C12:TypeConversionFanout.cpp
+&gt; class Orange {};
+&gt; class Pear {};
+&gt; 
+&gt; class Apple {
+&gt; public:
+&gt;   operator Orange() const;
+&gt;   operator Pear() const;
+&gt; };
+&gt; 
+&gt; // Overloaded eat():
+&gt; void eat(Orange);
+&gt; void eat(Pear);
+&gt; 
+&gt; int main() {
+&gt;   Apple c;
+&gt; //! eat(c);
+&gt;   // Error: Apple -&gt; Orange or Apple -&gt; Pear ???
+&gt; } ///:~
+</code></pre>
+<p>类 <strong>Apple</strong> 可以自动转换为 <strong>Orange</strong> 和 <strong>Pear</strong> 。这其中的隐患在于，除非有人不小心创建了两个重载版本的 <strong>eat( )</strong> ，否则不会有任何问题。(如果只有一个版本，<strong>main( )</strong> 中的代码就可以正常工作）。</p>
+<p>同样，解决办法--也是自动类型转换的一般注意事项--是只提供从一种类型到另一种类型的单一自动转换。你可以有到其他类型的转换，但它们不应该是_自动_的。您可以创建名称为 <strong>makeA( )</strong> 和 <strong>makeB( )</strong> 的显式函数调用。</p>
+<h4 id="hidden-activities-隐藏的活动"><a class="header" href="#hidden-activities-隐藏的活动">Hidden activities (隐藏的活动)</a></h4>
+<p>自动类型转换可能会引入比你预期更多的底层活动。作为一个小脑筋急转弯，请看对<strong>CopyingVsInitialization.cpp</strong>的修改：</p>
+<pre><code class="language-cpp">&gt; //: C12:CopyingVsInitialization2.cpp
+&gt; class Fi {};
+&gt; 
+&gt; class Fee {
+&gt; public:
+&gt;   Fee(int) {}
+&gt;   Fee(const Fi&amp;) {}
+&gt; };
+&gt; 
+&gt; class Fo {
+&gt;   int i;
+&gt; public:
+&gt;   Fo(int x = 0) : i(x) {}
+&gt;   operator Fee() const { return Fee(i); }
+&gt; };
+&gt; 
+&gt; int main() {
+&gt;   Fo fo;
+&gt;   Fee fee = fo;
+&gt; } ///:~
+</code></pre>
+<p>没有构造函数可以从 <strong>Fo</strong> 对象创建 <strong>Fee 费用</strong>。不过，<strong>Fo</strong> 可以自动转换为<strong>Fee</strong>。没有从 <strong>Fee</strong> 对象创建 <strong>Fee</strong> 的复制构造函数，但这是编译器可以为您创建的特殊函数之一。(默认构造函数、拷贝构造函数、**操作符=**和析构函数可以由编译器自动合成）。因此，对于相对无害的语句</p>
+<pre><code class="language-cpp">&gt; Fee fee = fo;
+</code></pre>
+<p>会调用自动类型转换操作符，并创建一个复制构造函数。</p>
+<p>谨慎使用自动类型转换。就像所有操作符重载一样，当自动类型转换能显著减少编码任务时，它是非常好的，但通常不值得无偿使用。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../../TICPP/12/12.5.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../../TICPP/12/12.7.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../../TICPP/12/12.5.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../../TICPP/12/12.7.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../../elasticlunr.min.js"></script>
+        <script src="../../mark.min.js"></script>
+        <script src="../../searcher.js"></script>
+
+        <script src="../../clipboard.min.js"></script>
+        <script src="../../highlight.js"></script>
+        <script src="../../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

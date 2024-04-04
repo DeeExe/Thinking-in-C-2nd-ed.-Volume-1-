@@ -88,7 +88,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="../../TICPP/11/11.0.html"><strong aria-hidden="true">1.</strong> 11.References & the Copy-Constructor)</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../TICPP/11/11.1.html" class="active"><strong aria-hidden="true">1.1.</strong> 11.1C++ 中的指针</a></li><li class="chapter-item expanded "><a href="../../TICPP/11/11.2.html"><strong aria-hidden="true">1.2.</strong> 11.2C++ 中的引用</a></li><li class="chapter-item expanded "><a href="../../TICPP/11/11.3.html"><strong aria-hidden="true">1.3.</strong> 11.3拷贝构造函数</a></li><li class="chapter-item expanded "><a href="../../TICPP/11/11.4.html"><strong aria-hidden="true">1.4.</strong> 11.成员指针</a></li><li class="chapter-item expanded "><a href="../../TICPP/11/11.5.html"><strong aria-hidden="true">1.5.</strong> 11.Summary</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../../TICPP/11/11.0.html"><strong aria-hidden="true">1.</strong> 11.References & the Copy-Constructor)</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../TICPP/11/11.1.html" class="active"><strong aria-hidden="true">1.1.</strong> 11.1C++ 中的指针</a></li><li class="chapter-item expanded "><a href="../../TICPP/11/11.2.html"><strong aria-hidden="true">1.2.</strong> 11.2C++ 中的引用</a></li><li class="chapter-item expanded "><a href="../../TICPP/11/11.3.html"><strong aria-hidden="true">1.3.</strong> 11.3拷贝构造函数</a></li><li class="chapter-item expanded "><a href="../../TICPP/11/11.4.html"><strong aria-hidden="true">1.4.</strong> 11.成员指针</a></li><li class="chapter-item expanded "><a href="../../TICPP/11/11.5.html"><strong aria-hidden="true">1.5.</strong> 11.Summary</a></li></ol></li><li class="chapter-item expanded "><a href="../../TICPP/12/12.0.html"><strong aria-hidden="true">2.</strong> 12.Operator Overloading)</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../TICPP/12/12.1.html"><strong aria-hidden="true">2.1.</strong> 12.1警告与保证</a></li><li class="chapter-item expanded "><a href="../../TICPP/12/12.2.html"><strong aria-hidden="true">2.2.</strong> 12.2语法</a></li><li class="chapter-item expanded "><a href="../../TICPP/12/12.3.html"><strong aria-hidden="true">2.3.</strong> 12.3可重载操作符</a></li><li class="chapter-item expanded "><a href="../../TICPP/12/12.4.html"><strong aria-hidden="true">2.4.</strong> 12.4非成员操作符</a></li><li class="chapter-item expanded "><a href="../../TICPP/12/12.5.html"><strong aria-hidden="true">2.5.</strong> 12.5重载赋值</a></li><li class="chapter-item expanded "><a href="../../TICPP/12/12.6.html"><strong aria-hidden="true">2.6.</strong> 12.6自动类型转换</a></li><li class="chapter-item expanded "><a href="../../TICPP/12/12.7.html"><strong aria-hidden="true">2.7.</strong> 12.7构造器转换</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -212,6 +212,22 @@ b = v;
 
         </div>
 
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
 
 
 

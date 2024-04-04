@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>11.Summary - TICPP</title>
+        <title>12.2语法 - TICPP</title>
 
 
         <!-- Custom HTML head -->
@@ -88,7 +88,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="../../TICPP/11/11.0.html"><strong aria-hidden="true">1.</strong> 11.References & the Copy-Constructor)</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../TICPP/11/11.1.html"><strong aria-hidden="true">1.1.</strong> 11.1C++ 中的指针</a></li><li class="chapter-item expanded "><a href="../../TICPP/11/11.2.html"><strong aria-hidden="true">1.2.</strong> 11.2C++ 中的引用</a></li><li class="chapter-item expanded "><a href="../../TICPP/11/11.3.html"><strong aria-hidden="true">1.3.</strong> 11.3拷贝构造函数</a></li><li class="chapter-item expanded "><a href="../../TICPP/11/11.4.html"><strong aria-hidden="true">1.4.</strong> 11.成员指针</a></li><li class="chapter-item expanded "><a href="../../TICPP/11/11.5.html" class="active"><strong aria-hidden="true">1.5.</strong> 11.Summary</a></li></ol></li><li class="chapter-item expanded "><a href="../../TICPP/12/12.0.html"><strong aria-hidden="true">2.</strong> 12.Operator Overloading)</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../TICPP/12/12.1.html"><strong aria-hidden="true">2.1.</strong> 12.1警告与保证</a></li><li class="chapter-item expanded "><a href="../../TICPP/12/12.2.html"><strong aria-hidden="true">2.2.</strong> 12.2语法</a></li><li class="chapter-item expanded "><a href="../../TICPP/12/12.3.html"><strong aria-hidden="true">2.3.</strong> 12.3可重载操作符</a></li><li class="chapter-item expanded "><a href="../../TICPP/12/12.4.html"><strong aria-hidden="true">2.4.</strong> 12.4非成员操作符</a></li><li class="chapter-item expanded "><a href="../../TICPP/12/12.5.html"><strong aria-hidden="true">2.5.</strong> 12.5重载赋值</a></li><li class="chapter-item expanded "><a href="../../TICPP/12/12.6.html"><strong aria-hidden="true">2.6.</strong> 12.6自动类型转换</a></li><li class="chapter-item expanded "><a href="../../TICPP/12/12.7.html"><strong aria-hidden="true">2.7.</strong> 12.7构造器转换</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../../TICPP/11/11.0.html"><strong aria-hidden="true">1.</strong> 11.References & the Copy-Constructor)</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../TICPP/11/11.1.html"><strong aria-hidden="true">1.1.</strong> 11.1C++ 中的指针</a></li><li class="chapter-item expanded "><a href="../../TICPP/11/11.2.html"><strong aria-hidden="true">1.2.</strong> 11.2C++ 中的引用</a></li><li class="chapter-item expanded "><a href="../../TICPP/11/11.3.html"><strong aria-hidden="true">1.3.</strong> 11.3拷贝构造函数</a></li><li class="chapter-item expanded "><a href="../../TICPP/11/11.4.html"><strong aria-hidden="true">1.4.</strong> 11.成员指针</a></li><li class="chapter-item expanded "><a href="../../TICPP/11/11.5.html"><strong aria-hidden="true">1.5.</strong> 11.Summary</a></li></ol></li><li class="chapter-item expanded "><a href="../../TICPP/12/12.0.html"><strong aria-hidden="true">2.</strong> 12.Operator Overloading)</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../../TICPP/12/12.1.html"><strong aria-hidden="true">2.1.</strong> 12.1警告与保证</a></li><li class="chapter-item expanded "><a href="../../TICPP/12/12.2.html" class="active"><strong aria-hidden="true">2.2.</strong> 12.2语法</a></li><li class="chapter-item expanded "><a href="../../TICPP/12/12.3.html"><strong aria-hidden="true">2.3.</strong> 12.3可重载操作符</a></li><li class="chapter-item expanded "><a href="../../TICPP/12/12.4.html"><strong aria-hidden="true">2.4.</strong> 12.4非成员操作符</a></li><li class="chapter-item expanded "><a href="../../TICPP/12/12.5.html"><strong aria-hidden="true">2.5.</strong> 12.5重载赋值</a></li><li class="chapter-item expanded "><a href="../../TICPP/12/12.6.html"><strong aria-hidden="true">2.6.</strong> 12.6自动类型转换</a></li><li class="chapter-item expanded "><a href="../../TICPP/12/12.7.html"><strong aria-hidden="true">2.7.</strong> 12.7构造器转换</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -173,21 +173,58 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
-<p>C++ 中的指针与 C 中的指针几乎完全相同，这是好事。否则，很多 C 代码都无法在 C++ 下正常编译。唯一会产生的编译时错误发生在危险赋值上。如果这些赋值确实是我们想要的，那么只需一个简单（显式！）的转置就能消除编译时错误。</p>
-<p>C++ 还添加了 Algol 和 Pascal 中的 <em>reference</em>，它就像一个常量指针，会被编译器自动取消引用。引用持有一个地址，但你可以像对待对象一样对待它。引用对于使用操作符重载（下一章的主题）的简洁语法至关重要，同时也为普通函数传递和返回对象提供了语法上的便利。</p>
-<p>复制构造函数的参数是一个同类型现有对象的引用，它用于从现有对象创建一个新对象。当您传递或返回一个对象时，编译器会自动调用复制构造函数。虽然编译器会自动为你创建一个复制构造函数，但如果你认为你的类需要一个复制构造函数，你应该自己定义它，以确保发生正确的行为。如果不希望通过值传递或返回对象，则应创建一个私有的复制构造函数。</p>
-<p>指向成员的指针具有与普通指针相同的功能：您可以在运行时选择特定的存储区域（数据或函数）。指向成员的指针只是与类成员协同工作，而不是与全局数据或函数协同工作。您可以获得编程的灵活性，从而在运行时改变行为。</p>
+                        <h2 id="syntax-语法"><a class="header" href="#syntax-语法">Syntax (语法)</a></h2>
+<p>定义重载运算符就像定义函数一样，但函数的名称是 <strong>operator@</strong>，其中 <strong>@</strong> 代表被重载的运算符。重载运算符参数列表中的参数个数取决于两个因素：</p>
+<ol>
+<li>无论是一元运算符（一个参数）还是二元运算符（两个参数）。</li>
+<li>操作符是定义为全局函数（一元函数为一个参数，二元函数为两个参数）还是成员函数（一元函数为零参数，二元函数为一个参数--对象成为左侧参数）。</li>
+</ol>
+<p>下面这个小类展示了操作符重载的语法：</p>
+<pre><code class="language-cpp">&gt; //: C12:OperatorOverloadingSyntax.cpp
+&gt; #include &lt;iostream&gt;
+&gt; using namespace std;
+&gt; 
+&gt; class Integer {
+&gt;   int i;
+&gt; public:
+&gt;   Integer(int ii) : i(ii) {}
+&gt;   const Integer
+&gt;   operator+(const Integer&amp; rv) const {
+&gt;     cout &lt;&lt; "operator+" &lt;&lt; endl;
+&gt;     return Integer(i + rv.i);
+&gt;   }
+&gt;   Integer&amp;
+&gt;   operator+=(const Integer&amp; rv) {
+&gt;     cout &lt;&lt; "operator+=" &lt;&lt; endl;
+&gt;     i += rv.i;
+&gt;     return *this;
+&gt;   }
+&gt; };
+&gt; 
+&gt; int main() {
+&gt;   cout &lt;&lt; "built-in types:" &lt;&lt; endl;
+&gt;   int i = 1, j = 2, k = 3;
+&gt;   k += i + j;
+&gt;   cout &lt;&lt; "user-defined types:" &lt;&lt; endl;
+&gt;   Integer ii(1), jj(2), kk(3);
+&gt;   kk += ii + jj;
+&gt; } ///:~
+</code></pre>
+<p>这两个重载运算符被定义为内联成员函数，在调用时会发布公告。对于二元操作符来说，单个参数出现在操作符的右侧。一元运算符定义为成员函数时没有参数。成员函数是为操作符左侧的对象调用的。</p>
+<p>对于非条件运算符（条件运算符通常返回一个布尔值），如果两个参数的类型相同，则几乎总是希望返回一个与操作类型相同的对象或引用。(如果两个参数不是同一类型，那就由你来解释它应该产生什么结果）。这样就可以建立复杂的表达式：</p>
+<pre><code class="language-cpp">&gt; kk += ii + jj;
+</code></pre>
+<p><strong>operator+</strong> 产生一个新的 <strong>Integer</strong>（临时），用作 <strong>operator+=</strong> 的 <strong>rv</strong> 参数。一旦不再需要这个临时值，它就会被销毁。</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../../TICPP/11/11.4.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../../TICPP/12/12.1.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="../../TICPP/12/12.0.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../../TICPP/12/12.3.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -197,11 +234,11 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../../TICPP/11/11.4.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../../TICPP/12/12.1.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="../../TICPP/12/12.0.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../../TICPP/12/12.3.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
